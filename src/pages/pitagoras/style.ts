@@ -10,12 +10,13 @@ export const Container = styled.div`
     border-radius: 20px;
     height: 600px;
     margin-top: 10px;
-    p {
-        font-size: 20px;
-    }
     div {
         font-size: 20px;
         letter-spacing: 1px;
+    }
+    p {
+        font-size: 18px;
+        letter-spacing: 2px;
     }
     h4 {
         font-size: 20px;
@@ -36,16 +37,12 @@ export const Title = styled.h1`
     padding: 0.75rem;
     margin-top: 10px;
     margin-bottom: 10px;
-    p {
+    text-align: center;
+    span {
         text-align: center;
         font-family: 'Spline Sans', sans-serif;
+        font-size: 20px;
     }
-`;
-export const Response = styled.span`
-    background: ${(props) => props.color};
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 10px;
 `;
 export const Button = styled.button`
     display: inline-block;
@@ -63,4 +60,10 @@ export const Button = styled.button`
     margin: 10px;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
     cursor: pointer;
+`;
+export const Response = styled.span`
+    background: ${(props) => props.color};
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
 `;

@@ -23,12 +23,8 @@ const Bhaskara: FC = () => {
     const [msg, setMsg] = useState<string>();
 
     useEffect(() => {
-
-        const randomArrayIndex = Math.floor(Math.random() * 2);
-        const randoms = [
-            Math.floor(Math.random() * 10), 
-            Math.floor(Math.random() * -10)
-        ]
+        const randoms = [10, -10, 20, -20];
+        const randomArrayIndex = Math.floor(Math.random() * randoms.length);
 
         //randomArrayIndex and variable randoms alternate between a negative and positive value of A and B in the equation 
         setA(Math.floor(Math.random() * 20));
@@ -38,15 +34,15 @@ const Bhaskara: FC = () => {
         if(a && b && c) {
             setRes(Math.pow(b, 2) - (4 * a * c))
         }
-    }, [a, b, c]);
+    }, []);
 
     const submitResponse = useCallback(() => {
         const response = Number(inputRef.current.value)
 
         if(response === res) {
-            setMsg('Resposta Certa')
+            setMsg('Você Acertou!')
         }else {
-            setMsg('Resposta Errada')
+            setMsg('Você Errou!')
         }
         
     }, [res]);
@@ -64,9 +60,11 @@ const Bhaskara: FC = () => {
             <input type="number" ref={inputRef} />
             <Button onClick={submitResponse}>Enviar Resposta</Button>
 
-            { msg === 'Resposta Certa'? 
-                <Response color={'#28a745'}>{ msg? msg : '' }</Response> :
-                <Response color={'#dc3545'}>{ msg? msg : '' }</Response>
+            { 
+                msg? msg === 'Você Acertou!'? 
+                    <Response color={'#28a745'}>{ msg }</Response> : 
+                    <Response color={'#dc3545'}>{ msg }</Response>
+                : ''
             }
         </Container>
     )

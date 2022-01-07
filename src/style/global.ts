@@ -8,6 +8,10 @@ export const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     }
 
+    body {
+        background-color: #343a40;
+    }
+
     body, input, textarea {
         font-family: 'Bebas Neue', cursive;
     }
@@ -18,5 +22,6 @@ export const GlobalStyle = createGlobalStyle`
     #root {
         max-width: 1120px;
         margin: 0 auto;
+        
     }
 `;

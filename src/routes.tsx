@@ -4,7 +4,7 @@ import {
     Route
   } from "react-router-dom";
 
-import Convert from './pages/convert';
+import Convert from './pages/pitagoras';
 import Bhaskara from './pages/bhaskara/index';
 
 const Router = () => {
@@ -12,8 +12,8 @@ const Router = () => {
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/convert" element={<Convert />} />
-                    <Route path="/bhaskara" element={<Bhaskara />} />
+                    <Route path="exercicio/pitagoras" element={<Convert />} />
+                    <Route path="exercicio/bhaskara" element={<Bhaskara />} />
                 </Routes>
             </BrowserRouter>
         </>
