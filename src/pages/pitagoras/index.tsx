@@ -13,8 +13,7 @@ const Convert: React.FC = () => {
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>();
 
-    useEffect(() => {
-
+    const loadQuestion = useCallback(() => {
         const randoms = [10, 20, 30];
         const randomArrayIndex = Math.floor(Math.random() * randoms.length);
 
@@ -22,13 +21,26 @@ const Convert: React.FC = () => {
         setCatetoB(Math.floor(Math.random() * randoms[randomArrayIndex]))
 
         if(catetoA && catetoB) {
-            setRes(String(Math.sqrt(Math.pow(catetoA, 2) + Math.pow(catetoB, 2))))
+            setRes(
+                String(
+                    Math.sqrt(
+                        Math.pow(catetoA, 2) + Math.pow(catetoB, 2)
+                    )
+                ));
         }
 
-    }, []);
+        setMsg('');
+    }, [catetoA, catetoB])
+
+    useEffect(() => loadQuestion(), []);
 
     const submitReponse = useCallback(() => {
         const response = inputRef.current.value;
+
+        if(response.length === 0) {
+            setMsg('Resposta Vazia!');
+            return;
+        }
 
         if(res?.includes('.')) {
             const [integerRes, naturalRes] = res.split('.')
@@ -38,7 +50,6 @@ const Convert: React.FC = () => {
             }else {
                 setMsg('Você Errou!');
             }
-
         }else {
             if(response === res) {
                 setMsg('Você Acertou!');
@@ -48,6 +59,8 @@ const Convert: React.FC = () => {
         }
 
     }, [res]);
+
+    const loadOtherQuestion = useCallback(() => loadQuestion(), [loadQuestion])
 
     return(
         <Container>
@@ -62,6 +75,8 @@ const Convert: React.FC = () => {
             <h4>Resposta</h4>
             <input type="number" ref={inputRef} />
             <Button onClick={submitReponse}>Enviar Resposta</Button>
+            <br />
+            <Button onClick={loadOtherQuestion}>Outra Questão</Button>
 
             { 
                 msg? msg === 'Você Acertou!'? 
@@ -69,7 +84,7 @@ const Convert: React.FC = () => {
                 <Response color={'#dc3545'}>{ msg }</Response>
                 : ''
             }
-
+            { res }
         </Container>
     )
 }

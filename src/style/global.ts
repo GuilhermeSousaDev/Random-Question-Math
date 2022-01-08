@@ -14,8 +14,9 @@ export const GlobalStyle = createGlobalStyle`
 
     body, input, textarea {
         font-family: 'Bebas Neue', cursive;
+        letter-spacing: 1px;
     }
-    button, span {
+    button, p {
         font-family: 'Spline Sans', sans-serif;
     }
 

@@ -29,6 +29,9 @@ export const Container = styled.div`
         border: 1px solid black;
         text-align: center;
     }
+    span {
+        font-size: 14px;
+    }
 `;
 export const Title = styled.h1`
     color: #fff;
