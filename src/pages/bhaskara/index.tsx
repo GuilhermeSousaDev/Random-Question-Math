@@ -13,14 +13,16 @@ import { Button } from './style';
 import { Response } from './style';
 
 const Bhaskara: FC = () => {
-
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
+    const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
+    const divRefB = useRef() as MutableRefObject<HTMLDivElement>;
+    const divRefC = useRef() as MutableRefObject<HTMLDivElement>;
 
     const [a, setA] = useState<number>();
     const [b, setB] = useState<number>();
     const [c, setC] = useState<number>();
     const [res, setRes] = useState<string>();
-    const [msg, setMsg] = useState<string>();
+    const [msg, setMsg] = useState<string>('');
 
     const loadQuestion = useCallback(() => {
         const randoms = [10, -10, 20, -20];
@@ -37,9 +39,13 @@ const Bhaskara: FC = () => {
 
         if(a && b && c) {
             setRes(String(Math.pow(b, 2) - (4 * a * c)))
+            divRefA.current.innerHTML = String(a)
+            divRefB.current.innerHTML = String(b)
+            divRefC.current.innerHTML = String(c)
         }
 
         setMsg('');
+        inputRef.current.value = '';
     }, [a, b, c]);
 
     const submitResponse = useCallback(() => {
@@ -50,40 +56,43 @@ const Bhaskara: FC = () => {
             return;
         }
 
-        if(response === res) {
-            setMsg('Você Acertou!')
-        }else {
+        response === res?
+            setMsg('Você Acertou!') : 
             setMsg('Você Errou!')
-        }
         
     }, [res]);
 
     useEffect(() => loadQuestion(), []);
 
-    const loadOtherQuestion = useCallback(() => loadQuestion(), [loadQuestion])
-
     return(
         <Container>
             <Title> Resolva a Questão <hr /> <p>Equação do 2 Grau</p> </Title>
 
-            <div>A: {a}<span>x2</span></div>
-            <div>B: {b}<span>x</span></div>
-            <div>C: {c}</div>
+            <div ref={divRefA}> {a}</div>
+            <div ref={divRefB}> {b}</div>
+            <div ref={divRefC}> {c}</div>
             <p>Δ = b**2 - 4 . a . c</p>
 
             <h4>Resposta</h4>
             <input type="number" ref={inputRef} />
             <Button onClick={submitResponse}>Enviar Resposta</Button>
             <br />
-            <Button onClick={loadOtherQuestion}>Outra Questão</Button>
+            <Button onClick={loadQuestion}>Outra Questão</Button>
 
             { 
-                msg? msg === 'Você Acertou!'? 
+                msg ? msg === 'Você Acertou!'? 
                     <Response color={'#28a745'}>{ msg }</Response> : 
                     <Response color={'#dc3545'}>{ msg }</Response>
                 : ''
             }
-            { res }
+            <br />
+            
+            {!msg? 
+                res? 
+                    'Resposta Pronta, Tente Resolver' : 
+                    'Se o Resultado não bater carregue outra questão'
+                : ''
+            }
         </Container>
     )
 }

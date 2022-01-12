@@ -7,6 +7,8 @@ import { Response } from './style';
 
 const Convert: React.FC = () => {
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
+    const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
+    const divRefB = useRef() as MutableRefObject<HTMLDivElement>;
 
     const [catetoA, setCatetoA] = useState<number>();
     const [catetoB, setCatetoB] = useState<number>();
@@ -79,12 +81,11 @@ const Convert: React.FC = () => {
             <Button onClick={loadOtherQuestion}>Outra Questão</Button>
 
             { 
-                msg? msg === 'Você Acertou!'? 
-                <Response color={'#28a745'}>{ msg }</Response> : 
-                <Response color={'#dc3545'}>{ msg }</Response>
+                msg ? msg === 'Você Acertou!'? 
+                    <Response color={'#28a745'}>{ msg }</Response> : 
+                    <Response color={'#dc3545'}>{ msg }</Response>
                 : ''
             }
-            { res }
         </Container>
     )
 }
