@@ -22,6 +22,8 @@ const VelMedia: FC = () => {
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>();
 
+    useEffect(() => loadQuestion(), [])
+
     const loadQuestion = useCallback(() => {
         setDeltas(Math.floor(Math.random() * (1200 - 100) - 100));
         setDeltat(Math.floor(Math.random() * (20 - 2) - 2));
@@ -35,8 +37,6 @@ const VelMedia: FC = () => {
 
         setMsg('');
     }, [deltas, deltat]);
-
-    useEffect(() => loadQuestion(), [])
 
     const submitResponse = useCallback(() => {
         const response = inputRef.current.value;

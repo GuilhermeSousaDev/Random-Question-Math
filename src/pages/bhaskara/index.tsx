@@ -24,6 +24,8 @@ const Bhaskara: FC = () => {
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>('');
 
+    useEffect(() => loadQuestion(), []);
+
     const loadQuestion = useCallback(() => {
         const randoms = [10, -10, 20, -20];
         const randomArrayIndex = Math.floor(Math.random() * randoms.length);
@@ -39,9 +41,9 @@ const Bhaskara: FC = () => {
 
         if(a && b && c) {
             setRes(String(Math.pow(b, 2) - (4 * a * c)))
-            divRefA.current.innerHTML = String(a)
-            divRefB.current.innerHTML = String(b)
-            divRefC.current.innerHTML = String(c)
+            divRefA.current.innerHTML = `a: ${String(a)}`;
+            divRefB.current.innerHTML = `b: ${String(b)}`;
+            divRefC.current.innerHTML = `c: ${String(c)}`;
         }
 
         setMsg('');
@@ -61,8 +63,6 @@ const Bhaskara: FC = () => {
             setMsg('Você Errou!')
         
     }, [res]);
-
-    useEffect(() => loadQuestion(), []);
 
     return(
         <Container>

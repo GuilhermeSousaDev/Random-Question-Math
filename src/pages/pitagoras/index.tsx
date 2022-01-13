@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, MutableRefObject, useCallback } from 'react';
+import React, { 
+    useState, 
+    useEffect, 
+    useRef, 
+    MutableRefObject, 
+    useCallback 
+} from 'react';
 
 import { Title } from './style';
 import { Container } from './style';
@@ -15,6 +21,8 @@ const Convert: React.FC = () => {
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>();
 
+    useEffect(() => loadQuestion(), []);
+
     const loadQuestion = useCallback(() => {
         const randoms = [10, 20, 30];
         const randomArrayIndex = Math.floor(Math.random() * randoms.length);
@@ -29,12 +37,14 @@ const Convert: React.FC = () => {
                         Math.pow(catetoA, 2) + Math.pow(catetoB, 2)
                     )
                 ));
+
+            divRefA.current.innerHTML = `Cateto a: ${String(catetoA)}`;
+            divRefB.current.innerHTML = `Cateto b: ${String(catetoB)}`;
         }
 
         setMsg('');
+        inputRef.current.value = '';
     }, [catetoA, catetoB])
-
-    useEffect(() => loadQuestion(), []);
 
     const submitReponse = useCallback(() => {
         const response = inputRef.current.value;
@@ -62,14 +72,12 @@ const Convert: React.FC = () => {
 
     }, [res]);
 
-    const loadOtherQuestion = useCallback(() => loadQuestion(), [loadQuestion])
-
     return(
         <Container>
             <Title> Resolva a Questão <hr /> <span>Teorema de Pitágoras</span> </Title>
 
-            <div>Cateto a: {catetoA}</div>
-            <div>Cateto b: {catetoB}</div>
+            <div ref={divRefA}>Cateto a: {catetoA}</div>
+            <div ref={divRefB}>Cateto b: {catetoB}</div>
 
             <p>Fórmula: a2 = b2 + c2</p>
             <p>Hipotenusa = Soma dos Catetos ao quadrado</p>
@@ -78,12 +86,20 @@ const Convert: React.FC = () => {
             <input type="number" ref={inputRef} />
             <Button onClick={submitReponse}>Enviar Resposta</Button>
             <br />
-            <Button onClick={loadOtherQuestion}>Outra Questão</Button>
+            <Button onClick={loadQuestion}>Outra Questão</Button>
 
             { 
                 msg ? msg === 'Você Acertou!'? 
                     <Response color={'#28a745'}>{ msg }</Response> : 
                     <Response color={'#dc3545'}>{ msg }</Response>
+                : ''
+            }
+            <br />
+            
+            {!msg? 
+                res? 
+                    'Resposta Pronta, Tente Resolver' : 
+                    'Se o Resultado não bater carregue outra questão'
                 : ''
             }
         </Container>
