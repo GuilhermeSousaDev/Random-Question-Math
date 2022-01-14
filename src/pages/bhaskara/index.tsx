@@ -7,10 +7,12 @@ import React, {
     useState 
 } from 'react';
 
-import { Container } from './style';
-import { Title } from './style';
-import { Button } from './style';
-import { Response } from './style';
+import { 
+    Container, 
+    Button, 
+    Title, 
+    Response 
+} from '../../style/globalStyle';
 
 const Bhaskara: FC = () => {
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -68,9 +70,9 @@ const Bhaskara: FC = () => {
         <Container>
             <Title> Resolva a Questão <hr /> <p>Equação do 2 Grau</p> </Title>
 
-            <div ref={divRefA}> {a}</div>
-            <div ref={divRefB}> {b}</div>
-            <div ref={divRefC}> {c}</div>
+            <div ref={divRefA}> a: {a}</div>
+            <div ref={divRefB}> b: {b}</div>
+            <div ref={divRefC}> c: {c}</div>
             <p>Δ = b**2 - 4 . a . c</p>
 
             <h4>Resposta</h4>
@@ -90,7 +92,7 @@ const Bhaskara: FC = () => {
             {!msg? 
                 res? 
                     'Resposta Pronta, Tente Resolver' : 
-                    'Se o Resultado não bater carregue outra questão'
+                    'Erro ao calcular resposta, carregue outra questão'
                 : ''
             }
         </Container>

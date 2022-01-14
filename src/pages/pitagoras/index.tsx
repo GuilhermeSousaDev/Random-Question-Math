@@ -6,10 +6,12 @@ import React, {
     useCallback 
 } from 'react';
 
-import { Title } from './style';
-import { Container } from './style';
-import { Button } from './style';
-import { Response } from './style';
+import { 
+    Container, 
+    Button, 
+    Title, 
+    Response 
+} from '../../style/globalStyle';
 
 const Convert: React.FC = () => {
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -99,7 +101,7 @@ const Convert: React.FC = () => {
             {!msg? 
                 res? 
                     'Resposta Pronta, Tente Resolver' : 
-                    'Se o Resultado não bater carregue outra questão'
+                    'Erro ao calcular resposta, carregue outra questão'
                 : ''
             }
         </Container>
