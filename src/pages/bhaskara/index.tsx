@@ -7,12 +7,9 @@ import React, {
     useState 
 } from 'react';
 
-import { 
-    Container, 
-    Button, 
-    Title, 
-    Response 
-} from '../../style/globalStyle';
+import { Container, Button, Title, Response} from '../../style/globalStyle';
+
+import BhaskaraX1X2 from '../../components/BhaskaraX1X2'
 
 const Bhaskara: FC = () => {
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -82,8 +79,10 @@ const Bhaskara: FC = () => {
             <Button onClick={loadQuestion}>Outra Questão</Button>
 
             { 
+                res && a && b && 
                 msg ? msg === 'Você Acertou!'? 
-                    <Response color={'#28a745'}>{ msg }</Response> : 
+                    <BhaskaraX1X2 delta={Number(res)} a={a} b={b} />
+                    : 
                     <Response color={'#dc3545'}>{ msg }</Response>
                 : ''
             }

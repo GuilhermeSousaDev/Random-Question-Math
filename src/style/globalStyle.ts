@@ -50,6 +50,10 @@ export const Response = styled.span`
     border: 1px solid black;
     border-radius: 10px;
 `;
+export const Span = styled.span`
+    font-size: 20px;
+    letter-spacing: 1px;
+`;
 export const Button = styled.button`
     display: inline-block;
     background-color: #007bff;
