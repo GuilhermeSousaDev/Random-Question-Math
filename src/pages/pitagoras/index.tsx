@@ -61,6 +61,7 @@ const Convert: React.FC = () => {
             
             if(response === integerRes || response === integerRes + '.' + naturalRes) {
                 setMsg('Você Acertou!');
+                return;
             }else {
                 setMsg('Você Errou!');
             }

@@ -74,6 +74,7 @@ const Bhaskara: FC = () => {
 
             <h4>Resposta</h4>
             <input type="number" ref={inputRef} />
+
             <Button onClick={submitResponse}>Enviar Resposta</Button>
             <br />
             <Button onClick={loadQuestion}>Outra Questão</Button>
