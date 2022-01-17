@@ -16,6 +16,7 @@ export const Container = styled.div`
     div {
         font-size: 20px;
         letter-spacing: 1px;
+        font-family: 'Spline Sans', sans-serif;
     }
     h4 {
         font-size: 20px;

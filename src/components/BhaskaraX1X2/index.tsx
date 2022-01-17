@@ -85,6 +85,8 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
                 <Response color={'#28a745'}>{ msgX2 }</Response> : 
                 <Response color={'#dc3545'}>{ msgX2 }</Response> 
             }
+
+            {x1 && x2? console.log(x1, x2) : ''}
             
             <Button onClick={submitResponse}>Enviar</Button>
         </>

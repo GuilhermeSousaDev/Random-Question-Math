@@ -33,7 +33,7 @@ const Bhaskara: FC = () => {
         const randomCoefficientA = [1, -1, 10];
         const randomCoefficientArrayIndex = Math.floor(Math.random() * randomCoefficientA.length);
 
-        //randomArrayIndex and variable randoms alternate between a negative and positive value of A and B in the equation 
+        //randomArrayIndex and randoms variable alternate between a negative and positive value of A, B and c in the equation 
         setA(Math.floor(Math.random() * randomCoefficientA[randomCoefficientArrayIndex]));
         setB(Math.floor(Math.random() * randoms[randomArrayIndex]));
         setC(Math.floor(Math.random() * randoms[otherRandomArrayIndex]));
@@ -91,8 +91,13 @@ const Bhaskara: FC = () => {
             
             {!msg? 
                 res? 
-                    'Resposta Pronta, Tente Resolver' : 
-                    'Erro ao calcular resposta, carregue outra questão'
+                    <Response color={'#28a745'}>
+                        Resposta Pronta, Tente Resolver
+                    </Response> 
+                    : 
+                    <Response color={'#dc3545'}>
+                        Erro ao calcular resposta, carregue outra questão
+                    </Response>
                 : ''
             }
         </Container>

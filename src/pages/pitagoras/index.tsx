@@ -101,8 +101,13 @@ const Convert: React.FC = () => {
             
             {!msg? 
                 res? 
-                    'Resposta Pronta, Tente Resolver' : 
-                    'Erro ao calcular resposta, carregue outra questão'
+                    <Response color={'#28a745'}>
+                        Resposta Pronta, Tente Resolver
+                    </Response> 
+                    : 
+                    <Response color={'#dc3545'}>
+                        Erro ao calcular resposta, carregue outra questão
+                    </Response>
                 : ''
             }
         </Container>

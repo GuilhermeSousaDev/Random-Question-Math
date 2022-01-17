@@ -80,10 +80,16 @@ const VelMedia: FC = () => {
                     <Response color={'#dc3545'}>{ msg }</Response>
                 : ''
             }
+            
             {!msg? 
                 res? 
-                    'Resposta Pronta, Tente resolver' :
-                    'Erro ao calcular resposta, carregue outra questão'   
+                    <Response color={'#28a745'}>
+                        Resposta Pronta, Tente Resolver
+                    </Response> 
+                    : 
+                    <Response color={'#dc3545'}>
+                        Erro ao calcular resposta, carregue outra questão
+                    </Response>
                 : ''
             }
         </Container>
