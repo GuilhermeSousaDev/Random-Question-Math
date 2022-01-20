@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, FC } from 'react';
+import HitQuestionsList from '../../components/HitsQuestionsList';
 import api from '../../services/axios';
 
 interface IHits {
@@ -7,24 +8,31 @@ interface IHits {
     hitsPitagoras: number;
     hitsVelmedia: number;
     userId: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-const Home: React.FC = () => {
+const Home: FC = () => {
 
-    const [hits, setHits] = useState<IHits[]>();
+    const [hits, setHits] = useState<IHits[]>([]);
 
     useEffect(() => {
-        api.get('/question/hits')
-            .then(data => setHits(data.data))
-    }, []);
+        (async () => {
+            const data = await api.get('/question/hits')
+    
+            setTimeout(() => setHits(data.data), 1000);
+
+        })();
+    }, [hits]);
 
     return(
         <>
-            {
-                hits && hits.map(doc => {
-                    <h1>{doc.userId}</h1>
-                })
-            }
+            <h1>Home</h1>
+                {hits.length? 
+                    hits.map(doc => <HitQuestionsList key={doc.id} doc={doc} />) 
+                    : 
+                    <p>...Loading</p>
+                }
         </>
     )
 }
