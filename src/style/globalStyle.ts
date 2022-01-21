@@ -8,7 +8,6 @@ export const Container = styled.div`
     height: 600px;
     background-color: #17a2b8;
     border-radius: 20px;
-    height: 600px;
     margin-top: 10px;
     p {
         font-size: 20px;

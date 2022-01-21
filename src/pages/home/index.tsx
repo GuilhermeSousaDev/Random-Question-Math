@@ -1,39 +1,42 @@
-import React, { useEffect, useState, FC } from 'react';
-import HitQuestionsList from '../../components/HitsQuestionsList';
-import api from '../../services/axios';
-
-interface IHits {
-    id: string;
-    hitsBhaskara: number;
-    hitsPitagoras: number;
-    hitsVelmedia: number;
-    userId: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import React, { FC, MutableRefObject, useCallback, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { 
+    Button,
+    Title
+} from '../../style/globalStyle';
+import { Exercice, Container } from './style';
 
 const Home: FC = () => {
 
-    const [hits, setHits] = useState<IHits[]>([]);
+    const exerciceRef = useRef() as MutableRefObject<HTMLDivElement>;
+    const divRef = useRef() as MutableRefObject<HTMLDivElement>;
 
-    useEffect(() => {
-        (async () => {
-            const data = await api.get('/question/hits')
-    
-            setTimeout(() => setHits(data.data), 1000);
+    const showExercicie = useCallback(() => {
+        exerciceRef.current.style.display = 'block';
+        divRef.current.style.display = 'none';
+    }, []);
 
-        })();
-    }, [hits]);
+    const showMenu = useCallback(() => {
+        exerciceRef.current.style.display = 'none';
+        divRef.current.style.display = 'block';
+    }, []);
 
     return(
-        <>
-            <h1>Home</h1>
-                {hits.length? 
-                    hits.map(doc => <HitQuestionsList key={doc.id} doc={doc} />) 
-                    : 
-                    <p>...Loading</p>
-                }
-        </>
+        <Container>
+            <div ref={divRef}>
+                <Title>Questions Math</Title>
+                <Button onClick={showExercicie}>Resolver Questões</Button>
+            </div>
+            <Exercice ref={exerciceRef}>
+                <Title>Exercícios</Title>
+                <div>
+                    <Link to={'/exercicio/bhaskara'}>Bhaskara</Link>
+                    <Link to={'/exercicio/pitagoras'}>Pitagoras</Link>
+                    <Link to={'/exercicio/vel_media'}>Velocidade média</Link>
+                </div>
+                <Button onClick={showMenu}>Voltar</Button>
+            </Exercice>
+        </Container>
     )
 }
 
