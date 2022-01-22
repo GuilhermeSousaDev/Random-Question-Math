@@ -39,10 +39,10 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
 
             if(responseX1 === integerRes || responseX1 === `${integerRes}.${naturalRes}`) {
                 setMsgX1('Você Acertou o X1 da equação!');
-                return;
+            }else {
+                setMsgX1('Você Errou o X1 da equação!');
             }
 
-            setMsgX1('Você Errou o X1 da equação!');
         }
 
         Number(responseX1) === x1? 
@@ -52,13 +52,13 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
         const x2String = String(x2)
         if(x2String.includes('.')) {
             const [integerRes, naturalRes] = x2String.split('.');
-
+            console.log(integerRes, naturalRes)
             if(responseX2 === integerRes || responseX2 === `${integerRes}.${naturalRes}`) {
                 setMsgX2('Você Acertou o X2 da equação!');
-                return;
+            }else {
+                setMsgX2('Você Errou o X2 da equação!');
             }
 
-            setMsgX2('Você Errou o X2 da equação!');
         }
         
         Number(responseX2) === x2?
@@ -76,17 +76,19 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
             
             <br />
 
-            { msgX1?
+            { msgX1? msgX1 === 'Você Acertou o X1 da equação!'?
                 <Response color={'#28a745'}>{ msgX1 }</Response> : 
-                <Response color={'#dc3545'}>{ msgX1 }</Response> 
+                <Response color={'#dc3545'}>{ msgX1 }</Response>
+                : ''
             }
             <br />
-            { msgX2?
+            { msgX2? msgX2 === 'Você Acertou o X2 da equação!'?
                 <Response color={'#28a745'}>{ msgX2 }</Response> : 
                 <Response color={'#dc3545'}>{ msgX2 }</Response> 
+                : ''
             }
 
-            {x1 && x2? console.log(x1, x2) : ''}
+            {console.log(x1, x2)}
             
             <Button onClick={submitResponse}>Enviar</Button>
         </>

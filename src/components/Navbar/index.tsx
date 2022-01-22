@@ -1,15 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Links, Nav } from './style';
+import trofeuImg from '../../images/copo.png';
+import perfilImg from '../../images/perfil.png';
 
 const Navbar: React.FC = () => {
     return(
         <Nav>
-            <h3>Question Math</h3>
+            <Link to={'/'}><h3>MATH</h3></Link>
             <Links>
-                <Link to={'/exercicio/bhaskara'}>Bhaskara</Link>
-                <Link to={'/exercicio/pitagoras'}>Pitagoras</Link>
-                <Link to={'/exercicio/vel_media'}>Velocidade Média</Link>
+                <Link to={'/'}> <img src={trofeuImg} alt="trofeu" /> </Link>
+                <Link to={'/'}><img src={perfilImg} alt="trofeu" /></Link>
             </Links>
         </Nav>
     )

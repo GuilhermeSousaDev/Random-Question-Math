@@ -4,7 +4,8 @@ import {
     Route
   } from "react-router-dom";
 
-import Navbar from './components/Navbar'
+import Navbar from './components/Navbar';
+import GlobalBackButton from "./components/Navbar/GlobalBackButton";
 import Home from './pages/home';
 import Convert from './pages/pitagoras';
 import Bhaskara from './pages/bhaskara';
@@ -21,6 +22,7 @@ const Router = () => {
                     <Route path="exercicio/bhaskara" element={<Bhaskara />} />
                     <Route path="exercicio/vel_media" element={<VelMedia />} />
                 </Routes>
+                <GlobalBackButton />
             </BrowserRouter>
         </>
     )

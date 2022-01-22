@@ -5,7 +5,7 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 600px;
+    height: 500px;
     background-color: #17a2b8;
     border-radius: 20px;
     margin-top: 10px;
@@ -39,6 +39,7 @@ export const Title = styled.h1`
     padding: 0.75rem;
     margin-top: 10px;
     margin-bottom: 10px;
+    border-radius: 10px;
     p {
         text-align: center;
         font-family: 'Spline Sans', sans-serif;

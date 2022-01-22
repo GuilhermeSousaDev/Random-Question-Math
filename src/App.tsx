@@ -6,8 +6,7 @@ import { GlobalStyle } from './style/global';
 
 function App() {
     return(
-        <>
-            
+        <> 
             <Router />
             <GlobalStyle />
         </>

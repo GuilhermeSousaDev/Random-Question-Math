@@ -1,13 +1,9 @@
 import React, { FC, MutableRefObject, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-    Button,
-    Title
-} from '../../style/globalStyle';
+import { Button,Title } from '../../style/globalStyle';
 import { Exercice, Container } from './style';
 
 const Home: FC = () => {
-
     const exerciceRef = useRef() as MutableRefObject<HTMLDivElement>;
     const divRef = useRef() as MutableRefObject<HTMLDivElement>;
 
@@ -31,7 +27,7 @@ const Home: FC = () => {
                 <Title>Exercícios</Title>
                 <div>
                     <Link to={'/exercicio/bhaskara'}>Bhaskara</Link>
-                    <Link to={'/exercicio/pitagoras'}>Pitagoras</Link>
+                    <Link to={'/exercicio/pitagoras'}>Pitágoras</Link>
                     <Link to={'/exercicio/vel_media'}>Velocidade média</Link>
                 </div>
                 <Button onClick={showMenu}>Voltar</Button>
