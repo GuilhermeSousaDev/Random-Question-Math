@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
         <Nav>
             <Link to={'/'}><h3>MATH</h3></Link>
             <Links>
-                <Link to={'/'}> <img src={trofeuImg} alt="trofeu" /> </Link>
+                <Link to={'/rank'}> <img src={trofeuImg} alt="trofeu" /> </Link>
                 <Link to={'/'}><img src={perfilImg} alt="trofeu" /></Link>
             </Links>
         </Nav>

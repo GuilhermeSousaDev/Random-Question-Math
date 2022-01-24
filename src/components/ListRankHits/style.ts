@@ -4,7 +4,7 @@ export const Container = styled.ul`
     padding: 10px;
     border: 1px solid black;
     list-style-type: none;
-    margin-bottom: 10px;
+    margin-bottom: 50px;
     border-radius: 10px;
 `;
 

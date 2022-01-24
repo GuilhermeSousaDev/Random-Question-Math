@@ -5,10 +5,10 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    height: 500px;
     background-color: #17a2b8;
     border-radius: 20px;
     margin-top: 10px;
+    padding-bottom: 10px;
     p {
         font-size: 20px;
     }

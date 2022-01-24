@@ -9,7 +9,7 @@ import React, {
 
 import { Container, Button, Title, Response} from '../../style/globalStyle';
 
-import BhaskaraX1X2 from '../../components/BhaskaraX1X2'
+import BhaskaraX1X2 from '../../components/BhaskaraX1X2';
 
 const Bhaskara: FC = () => {
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
