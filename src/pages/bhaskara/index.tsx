@@ -7,6 +7,7 @@ import React, {
     useState 
 } from 'react';
 
+import api from '../../services/axios';
 import { Container, Button, Title, Response} from '../../style/globalStyle';
 
 import BhaskaraX1X2 from '../../components/BhaskaraX1X2';
@@ -50,16 +51,24 @@ const Bhaskara: FC = () => {
     }, [a, b, c]);
 
     const submitResponse = useCallback(() => {
-        const response = inputRef.current.value
+        const response = inputRef.current.value;
 
         if(response.length === 0) {
-            setMsg('Resposta Vazia!')
+            setMsg('Resposta Vazia!');
             return;
         }
 
-        response === res?
-            setMsg('Você Acertou!') : 
-            setMsg('Você Errou!')
+        if(response === res) {
+            (async () => {
+                const obj = { hitsBhaskara: 1, hitsPitagoras: 0, hitsVelmedia: 0 }
+                const request = await api.post('/question', obj)
+                console.log(request.data)
+            })();
+
+            setMsg('Você Acertou!');
+        }else {
+            setMsg('Você Errou!');
+        }
         
     }, [res]);
 
@@ -88,6 +97,7 @@ const Bhaskara: FC = () => {
                 : ''
             }
             <br />
+            {res}
             
             {!msg? 
                 res? 

@@ -6,6 +6,7 @@ import React, {
     FC,
     MutableRefObject
 } from 'react';
+import api from '../../services/axios';
 import { Button, Span, Response } from '../../style/globalStyle';
 
 interface IProp {
@@ -38,6 +39,17 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
             const [integerRes, naturalRes] = x1String.split('.');
 
             if(responseX1 === integerRes || responseX1 === `${integerRes}.${naturalRes}`) {
+
+                (async () => {
+                    const obj = { 
+                        hitsBhaskara: 1, 
+                        hitsPitagoras: 0, 
+                        hitsVelmedia: 0 
+                    }
+                    const request = await api.post('/question', obj);
+                    console.log(request.data);
+                })();
+
                 setMsgX1('Você Acertou o X1 da equação!');
             }else {
                 setMsgX1('Você Errou o X1 da equação!');
@@ -54,6 +66,16 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
             const [integerRes, naturalRes] = x2String.split('.');
             console.log(integerRes, naturalRes)
             if(responseX2 === integerRes || responseX2 === `${integerRes}.${naturalRes}`) {
+                (async () => {
+                    const obj = { 
+                        hitsBhaskara: 1, 
+                        hitsPitagoras: 0, 
+                        hitsVelmedia: 0 
+                    }
+                    const request = await api.post('/question', obj);
+                    console.log(request.data);
+                })();
+                
                 setMsgX2('Você Acertou o X2 da equação!');
             }else {
                 setMsgX2('Você Errou o X2 da equação!');
