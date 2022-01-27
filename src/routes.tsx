@@ -14,6 +14,8 @@ import RankBhaskara from "./pages/RankBhaskara";
 import RankPitagoras from "./pages/RankPitagoras";
 import RankVelmedia from "./pages/RankVelmedia";
 import ChooseRank from "./pages/ChooseRank";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
 
 const Router = () => {
     return(
@@ -29,6 +31,8 @@ const Router = () => {
                     <Route path="rank/pitagoras" element={<RankPitagoras />} />
                     <Route path="rank/vel_media" element={<RankVelmedia />} />
                     <Route path="rank" element={<ChooseRank />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
                 <GlobalBackButton />
             </BrowserRouter>

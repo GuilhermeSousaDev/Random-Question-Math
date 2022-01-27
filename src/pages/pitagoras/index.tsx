@@ -5,6 +5,7 @@ import React, {
     MutableRefObject, 
     useCallback 
 } from 'react';
+import api from '../../services/axios';
 
 import { 
     Container, 
@@ -60,6 +61,12 @@ const Convert: React.FC = () => {
             const [integerRes, naturalRes] = res.split('.')
             
             if(response === integerRes || response === integerRes + '.' + naturalRes) {
+                (async () => {
+                    const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
+                    const request = await api.post('/question', obj)
+                    console.log(request)
+                })();
+
                 setMsg('Você Acertou!');
                 return;
             }else {
@@ -67,6 +74,11 @@ const Convert: React.FC = () => {
             }
         }else {
             if(response === res) {
+                (async () => {
+                    const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
+                    const request = await api.post('/question', obj)
+                    console.log(request)
+                })();
                 setMsg('Você Acertou!');
             }else {
                 setMsg('Você Errou!');

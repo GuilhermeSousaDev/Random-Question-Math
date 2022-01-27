@@ -1,0 +1,113 @@
+import React, { 
+    FC, 
+    useCallback,
+    useState,
+    useRef,
+    MutableRefObject,
+} from 'react';
+import { Link } from 'react-router-dom';
+import api from '../../services/axios';
+import { 
+    Button,
+    Container, 
+    Title 
+} from '../../style/globalStyle';
+import { Error, Form } from './style';
+
+interface IForm {
+    name: string;
+    email: string;
+    password: string;
+}
+
+const Register: FC = () => {
+
+    const nameRef = useRef() as MutableRefObject<HTMLInputElement>
+    const emailRef = useRef() as MutableRefObject<HTMLInputElement>
+    const passwordRef = useRef() as MutableRefObject<HTMLInputElement>
+
+    const [msg, setMsg] = useState<string>('');
+    const [form, setForm] = useState<IForm>({
+        name: '',
+        email: '',
+        password: ''
+    });
+
+    const submitForm = useCallback(async () => {
+        const nameLen = nameRef.current.value;
+        const emailLen = emailRef.current.value;
+        const passwordLen = passwordRef.current.value;
+
+        if(!nameLen.length || !emailLen.length || !passwordLen.length) {
+            setMsg('Preencha todos os Campos!');
+            return;
+        }
+
+        if(emailLen.length < 3) {
+            setMsg('Email muito Curto!');
+            return;
+        }    
+
+        setForm({
+            name: nameRef.current.value,
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        })
+
+        setMsg('');
+
+        const { data } = await api.post('/login', form);
+
+        console.log(data);
+
+    }, [form]);
+
+    const changeForm = useCallback(() => {
+        setForm({
+            ...form,
+            name: nameRef.current.value,
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+        })
+    }, [form]);
+
+    return(
+        <Container>
+            <Title>Register</Title>
+
+            <Form>
+                {msg? <Error>{msg}</Error> : ''}
+
+                <span>Name</span>
+                <input 
+                    onChange={changeForm}
+                    ref={nameRef} 
+                    type="text" 
+                    name='name' />
+
+                <span>Email</span>
+                <input 
+                    onChange={changeForm}
+                    ref={emailRef} 
+                    type="email" 
+                    name='email' />
+
+                <span>Password</span>
+                <input 
+                    onChange={changeForm}
+                    ref={passwordRef} 
+                    type="password" 
+                    name='password' />
+                
+                <div>
+                    <Button onClick={submitForm}>Criar</Button>
+                    <Link to="/login">
+                        <Button>Login</Button>
+                    </Link>
+                </div>
+            </Form>
+        </Container>
+    )
+}
+
+export default Register;

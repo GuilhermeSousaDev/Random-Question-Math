@@ -3,14 +3,7 @@ import { Container, Title } from '../../style/globalStyle';
 
 import api from '../../services/axios';
 import ListRankHits from '../../components/ListRankHits';
-
-interface IData {
-    id: string;
-    hitsPitagoras: number;
-    userId: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import { IData } from '../../interfaces';
 
 const RankPitagoras: FC = () => {
 
@@ -28,7 +21,9 @@ const RankPitagoras: FC = () => {
             <Title>Rank Pitagoras Acertos</Title>
 
             {data.length? 
-                data.map(doc => <ListRankHits key={doc.id} doc={doc} />): 
+                data.map((doc, index) => <ListRankHits 
+                    key={doc.id} doc={doc} index={index} />
+                ): 
                 <p>...Loading</p>
             }
         </Container>

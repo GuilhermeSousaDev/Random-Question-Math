@@ -47,7 +47,7 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
                         hitsVelmedia: 0 
                     }
                     const request = await api.post('/question', obj);
-                    console.log(request.data);
+                    console.log(request);
                 })();
 
                 setMsgX1('Você Acertou o X1 da equação!');
@@ -73,7 +73,7 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
                         hitsVelmedia: 0 
                     }
                     const request = await api.post('/question', obj);
-                    console.log(request.data);
+                    console.log(request);
                 })();
                 
                 setMsgX2('Você Acertou o X2 da equação!');

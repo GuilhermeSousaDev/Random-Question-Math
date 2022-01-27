@@ -6,6 +6,7 @@ import React, {
     useRef, 
     useState 
 } from 'react';
+import api from '../../services/axios';
 
 import { 
     Container, 
@@ -48,14 +49,28 @@ const VelMedia: FC = () => {
             const [parsedRes, decimalRes] = res.split('.');
 
             if(response === parsedRes || response === `${parsedRes}.${decimalRes}`) {
+                (async () => {
+                    const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
+                    const request = await api.post('/question', obj)
+                    console.log(request)
+                })();
+
                 setMsg('Você Acertou!');
             }else {
                 setMsg('Você Errou!');
             }
         }else {
-            response === res?
-                setMsg('Você Acertou!') :
+            if(response === res) {
+                (async () => {
+                    const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
+                    const request = await api.post('/question', obj)
+                    console.log(request)
+                })();
+                
+                setMsg('Você Acertou!')
+            }else {
                 setMsg('Você Errou!')
+            }
         }
 
     }, [res]);

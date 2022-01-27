@@ -2,6 +2,7 @@ import React, {
     FC, 
     MutableRefObject, 
     useCallback, 
+    useContext, 
     useEffect, 
     useRef, 
     useState 
@@ -11,6 +12,7 @@ import api from '../../services/axios';
 import { Container, Button, Title, Response} from '../../style/globalStyle';
 
 import BhaskaraX1X2 from '../../components/BhaskaraX1X2';
+import { AuthContext } from '../../services/Context/AuthContext';
 
 const Bhaskara: FC = () => {
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
@@ -62,7 +64,6 @@ const Bhaskara: FC = () => {
             (async () => {
                 const obj = { hitsBhaskara: 1, hitsPitagoras: 0, hitsVelmedia: 0 }
                 const request = await api.post('/question', obj)
-                console.log(request.data)
             })();
 
             setMsg('Você Acertou!');
