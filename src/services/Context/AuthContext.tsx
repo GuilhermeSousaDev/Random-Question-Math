@@ -12,13 +12,7 @@ interface IAuth {
     token: string;
 }
 
-const AuthContext = createContext<IAuth>({
-    user: {
-        id: '',
-        name: '',
-    },
-    token: ''
-});
+const AuthContext = createContext<IAuth | null>(null);
 
 const AuthProvider: FC = ({ children }) => {
 
