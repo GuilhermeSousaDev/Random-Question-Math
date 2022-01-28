@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Links, Nav } from './style';
 import trofeuImg from '../../images/copo.png';
@@ -8,6 +8,14 @@ import avatarEmpty from '../../images/avatar_empty.png';
 const Navbar: React.FC = () => {
 
     const [isAuth, setIsAuth] = useState(false);
+
+    
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if(token) {
+            setIsAuth(true);
+        }
+    }, []);
 
     return(
         <Nav>

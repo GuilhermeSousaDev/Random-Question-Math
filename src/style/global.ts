@@ -12,7 +12,7 @@ export const GlobalStyle = createGlobalStyle`
         background-color: #343a40;
     }
 
-    body, input, textarea {
+    body, textarea {
         font-family: 'Bebas Neue', cursive;
         letter-spacing: 1px;
     }

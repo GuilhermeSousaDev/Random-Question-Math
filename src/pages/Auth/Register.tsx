@@ -4,7 +4,9 @@ import React, {
     useState,
     useRef,
     MutableRefObject,
+    useEffect,
 } from 'react';
+
 import { Link } from 'react-router-dom';
 import api from '../../services/axios';
 import { 
@@ -12,7 +14,7 @@ import {
     Container, 
     Title 
 } from '../../style/globalStyle';
-import { Error, Form } from './style';
+import { Error, Form, Msg } from './style';
 
 interface IForm {
     name: string;
@@ -26,6 +28,7 @@ const Register: FC = () => {
     const emailRef = useRef() as MutableRefObject<HTMLInputElement>
     const passwordRef = useRef() as MutableRefObject<HTMLInputElement>
 
+    const [error, setError] = useState<string>('');
     const [msg, setMsg] = useState<string>('');
     const [form, setForm] = useState<IForm>({
         name: '',
@@ -33,18 +36,28 @@ const Register: FC = () => {
         password: ''
     });
 
+    useEffect(() => {
+        if(error.length) {
+            setTimeout(() => setError(''), 10000);
+        }
+
+        if(msg.length) {
+            setTimeout(() => setMsg(''), 10000);
+        }
+    }, [error, msg]);
+
     const submitForm = useCallback(async () => {
         const nameLen = nameRef.current.value;
         const emailLen = emailRef.current.value;
         const passwordLen = passwordRef.current.value;
 
         if(!nameLen.length || !emailLen.length || !passwordLen.length) {
-            setMsg('Preencha todos os Campos!');
+            setError('Preencha todos os Campos!');
             return;
         }
 
         if(emailLen.length < 3) {
-            setMsg('Email muito Curto!');
+            setError('Email muito Curto!');
             return;
         }    
 
@@ -54,11 +67,19 @@ const Register: FC = () => {
             password: passwordRef.current.value,
         })
 
-        setMsg('');
+        setError('');
+        
+        const { data } = await api.post('/user', form);
 
-        const { data } = await api.post('/login', form);
+        if(data === 'This email already exists.') {
+            setError(data);
+        }else {
+            setMsg('Usuário Cadastrado com Sucesso!');
+        }
 
-        console.log(data);
+        nameRef.current.value = '';
+        emailRef.current.value = '';
+        passwordRef.current.value = '';
 
     }, [form]);
 
@@ -69,6 +90,7 @@ const Register: FC = () => {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         })
+
     }, [form]);
 
     return(
@@ -76,7 +98,8 @@ const Register: FC = () => {
             <Title>Register</Title>
 
             <Form>
-                {msg? <Error>{msg}</Error> : ''}
+                {error? <Error>{error}</Error> : ''}
+                {msg? <Msg>{msg}</Msg> : ''}
 
                 <span>Name</span>
                 <input 

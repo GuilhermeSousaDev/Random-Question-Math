@@ -5,7 +5,8 @@ import React, {
     useRef,
     MutableRefObject,
 } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import api from '../../services/axios';
 import { 
     Button,
     Container, 
@@ -23,13 +24,15 @@ const Login: FC = () => {
     const emailRef = useRef() as MutableRefObject<HTMLInputElement>
     const passwordRef = useRef() as MutableRefObject<HTMLInputElement>
 
+    const navigate = useNavigate();
+
     const [msg, setMsg] = useState<string>('');
     const [form, setForm] = useState<IForm>({
         email: '',
         password: ''
     });
 
-    const submitForm = useCallback(() => {
+    const submitForm = useCallback(async () => {
         const emailLen = emailRef.current.value;
         const passwordLen = passwordRef.current.value;
         if(!emailLen.length || !passwordLen.length) {
@@ -48,9 +51,17 @@ const Login: FC = () => {
 
         setMsg('');
 
-        console.log(form)
+        const { data } = await api.post('/login', form);
 
-    }, [form]);
+        if(data.user && data.token) {
+            localStorage.setItem('token', data.token);
+            navigate('/');
+        }
+
+        emailRef.current.value = '';
+        passwordRef.current.value = '';
+
+    }, [form, navigate]);
 
     const changeForm = useCallback(() => {
         setForm({
@@ -58,8 +69,6 @@ const Login: FC = () => {
             email: emailRef.current.value,
             password: passwordRef.current.value,
         })
-
-        console.log(form)
     }, [form]);
 
     return(
