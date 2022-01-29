@@ -38,11 +38,7 @@ const Login: FC = () => {
         if(!emailLen.length || !passwordLen.length) {
             setMsg('Preencha todos os Campos!');
             return;
-        }
-        if(emailLen.length < 3) {
-            setMsg('Email muito Curto!');
-            return;
-        }    
+        }   
 
         setForm({
             email: emailRef.current.value,
@@ -53,13 +49,14 @@ const Login: FC = () => {
 
         const { data } = await api.post('/login', form);
 
-        if(data.user && data.token) {
+        console.log(data);
+
+        if(!data.user && !data.token) {
+            setMsg(data);
+        } else {
             localStorage.setItem('token', data.token);
             navigate('/');
         }
-
-        emailRef.current.value = '';
-        passwordRef.current.value = '';
 
     }, [form, navigate]);
 

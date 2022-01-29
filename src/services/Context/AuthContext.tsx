@@ -1,15 +1,17 @@
 import React, { 
     createContext, 
     FC,
-    useContext
+    useEffect,
+    useState
 } from 'react';
 
 interface IAuth {
-    user: {
+    user?: {
         id: string;
         name: string;
     }
-    token: string;
+    token: string | null;
+    isAuth: boolean;
 }
 
 const AuthContext = createContext<IAuth>({
@@ -17,15 +19,24 @@ const AuthContext = createContext<IAuth>({
         id: '',
         name: '',
     },
-    token: ''
+    token: '',
+    isAuth: false,
 });
 
 const AuthProvider: FC = ({ children }) => {
 
-    const { token, user } = useContext(AuthContext);
+    const [token, setToken] = useState<string | null>('');
+    const [isAuth, setIsAuth] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(localStorage.getItem('token')) {
+            setToken(localStorage.getItem('token'));
+            setIsAuth(true);
+        }
+    }, []);
 
     return(
-        <AuthContext.Provider value={{user, token}}>
+        <AuthContext.Provider value={{ token, isAuth }}>
             {children}
         </AuthContext.Provider>
     )
