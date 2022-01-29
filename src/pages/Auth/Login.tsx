@@ -4,9 +4,12 @@ import React, {
     useState,
     useRef,
     MutableRefObject,
+    useEffect,
+    useContext,
 } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/axios';
+import { AuthContext } from '../../services/Context/AuthContext';
 import { 
     Button,
     Container, 
@@ -23,8 +26,16 @@ const Login: FC = () => {
 
     const emailRef = useRef() as MutableRefObject<HTMLInputElement>
     const passwordRef = useRef() as MutableRefObject<HTMLInputElement>
-
+    
     const navigate = useNavigate();
+    const { token } = useContext(AuthContext);
+
+    useEffect(() => {
+        if(token) {
+            navigate('/');
+        }
+    }, [navigate, token]);
+
 
     const [msg, setMsg] = useState<string>('');
     const [form, setForm] = useState<IForm>({
@@ -56,6 +67,8 @@ const Login: FC = () => {
         } else {
             localStorage.setItem('token', data.token);
             navigate('/');
+            // eslint-disable-next-line no-restricted-globals
+            location.reload()
         }
 
     }, [form, navigate]);

@@ -23,21 +23,23 @@ const Home: FC = () => {
     }, []);
 
     return(
-        <Container>
-            <div ref={divRef}>
-                <Title>Questions Math</Title>
-                <Button onClick={showExercicie}>Resolver Questões</Button>
-            </div>
-            <Exercice ref={exerciceRef}>
-                <Title>Exercícios</Title>
-                <div>
-                    <Link to={'/exercicio/bhaskara'}>Bhaskara</Link>
-                    <Link to={'/exercicio/pitagoras'}>Pitágoras</Link>
-                    <Link to={'/exercicio/vel_media'}>Velocidade média</Link>
+        <>
+            <Container>
+                <div ref={divRef}>
+                    <Title>Questions Math</Title>
+                    <Button onClick={showExercicie}>Resolver Questões</Button>
                 </div>
-                <Button onClick={showMenu}>Voltar</Button>
-            </Exercice>
-        </Container>
+                <Exercice ref={exerciceRef}>
+                    <Title>Exercícios</Title>
+                    <div>
+                        <Link to={'/exercicio/bhaskara'}>Bhaskara</Link>
+                        <Link to={'/exercicio/pitagoras'}>Pitágoras</Link>
+                        <Link to={'/exercicio/vel_media'}>Velocidade média</Link>
+                    </div>
+                    <Button onClick={showMenu}>Voltar</Button>
+                </Exercice>
+            </Container>
+        </>
     )
 }
 

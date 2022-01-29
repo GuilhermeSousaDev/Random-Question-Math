@@ -5,10 +5,12 @@ import React, {
     useRef,
     MutableRefObject,
     useEffect,
+    useContext,
 } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/axios';
+import { AuthContext } from '../../services/Context/AuthContext';
 import { 
     Button,
     Container, 
@@ -36,7 +38,14 @@ const Register: FC = () => {
         password: ''
     });
 
+    const navigate = useNavigate();
+    const { token } = useContext(AuthContext);
+
     useEffect(() => {
+        if(token) {
+            navigate('/')
+        }
+
         if(error.length) {
             setTimeout(() => setError(''), 10000);
         }
@@ -44,7 +53,7 @@ const Register: FC = () => {
         if(msg.length) {
             setTimeout(() => setMsg(''), 10000);
         }
-    }, [error, msg]);
+    }, [error, msg, navigate, token]);
 
     const submitForm = useCallback(async () => {
         const nameLen = nameRef.current.value;
