@@ -39,10 +39,10 @@ const Register: FC = () => {
     });
 
     const navigate = useNavigate();
-    const { token } = useContext(AuthContext);
+    const { isAuth } = useContext(AuthContext);
 
     useEffect(() => {
-        if(token) {
+        if(isAuth) {
             navigate('/')
         }
 
@@ -53,7 +53,7 @@ const Register: FC = () => {
         if(msg.length) {
             setTimeout(() => setMsg(''), 10000);
         }
-    }, [error, msg, navigate, token]);
+    }, [error, msg, navigate, isAuth]);
 
     const submitForm = useCallback(async () => {
         const nameLen = nameRef.current.value;

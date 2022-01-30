@@ -2,11 +2,14 @@ import React, {
     FC, 
     MutableRefObject, 
     useCallback, 
+    useContext, 
     useEffect, 
     useRef, 
     useState 
 } from 'react';
 import api from '../../services/axios';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../services/Context/AuthContext';
 
 import { 
     Container, 
@@ -16,6 +19,13 @@ import {
 } from '../../style/globalStyle';
 
 const VelMedia: FC = () => {
+    const navigate = useNavigate();
+    const { isAuth } = useContext(AuthContext);
+
+    if(!isAuth) {
+        navigate('/login');
+    }
+
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefS = useRef() as MutableRefObject<HTMLDivElement>;
     const divRefT = useRef() as MutableRefObject<HTMLDivElement>;

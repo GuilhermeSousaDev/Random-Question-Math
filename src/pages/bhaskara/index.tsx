@@ -9,12 +9,25 @@ import React, {
 } from 'react';
 
 import api from '../../services/axios';
-import { Container, Button, Title, Response} from '../../style/globalStyle';
+import { 
+    Container, 
+    Button, 
+    Title, 
+    Response
+} from '../../style/globalStyle';
 
 import BhaskaraX1X2 from '../../components/BhaskaraX1X2';
 import { AuthContext } from '../../services/Context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Bhaskara: FC = () => {
+    const navigate = useNavigate();
+    const { isAuth } = useContext(AuthContext);
+
+    if(!isAuth) {
+        navigate('/login');
+    }
+
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
     const divRefB = useRef() as MutableRefObject<HTMLDivElement>;

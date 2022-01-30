@@ -4,6 +4,7 @@ import React, {
     useEffect,
     useState
 } from 'react';
+import api from '../axios';
 
 interface IAuth {
     user?: {
@@ -12,6 +13,16 @@ interface IAuth {
     }
     token: string | null;
     isAuth: boolean;
+}
+
+interface IUser {
+    id: string;
+    name: string;
+}
+
+interface IRequest {
+    token: string;
+    tokenVerified: IUser;
 }
 
 const AuthContext = createContext<IAuth>({
@@ -25,18 +36,39 @@ const AuthContext = createContext<IAuth>({
 
 const AuthProvider: FC = ({ children }) => {
 
-    const [token, setToken] = useState<string | null>('');
+    const [token, setToken] = useState<string | null>(null);
+    const [user, setUser] = useState<IUser>();
     const [isAuth, setIsAuth] = useState<boolean>(false);
 
     useEffect(() => {
         if(localStorage.getItem('token')) {
-            setToken(localStorage.getItem('token'));
-            setIsAuth(true);
-        }
-    }, []);
+            setTimeout(async () => {
+                    const { data, status } = await api.get<IRequest>('/token', {
+                        headers: {
+                            Authorization: localStorage.getItem('token') as any
+                        }
+                    })
+
+                    console.log(data)
+    
+                    if(status !== 200) {
+                        localStorage.removeItem('token');
+                        setToken(null);
+                        setIsAuth(false);
+                    } else {
+                        setIsAuth(true);
+                        setUser({ 
+                            id: data.tokenVerified.id,
+                            name: data.tokenVerified.name,
+                        })
+                        setToken(data.token);
+                    }
+            }, 500)
+        } 
+    }, [token]);
 
     return(
-        <AuthContext.Provider value={{ token, isAuth }}>
+        <AuthContext.Provider value={{ token, isAuth, user }}>
             {children}
         </AuthContext.Provider>
     )

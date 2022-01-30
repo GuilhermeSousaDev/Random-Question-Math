@@ -4,7 +4,6 @@ import {
     Route
   } from "react-router-dom";
 
-import Navbar from './components/Navbar';
 import GlobalBackButton from "./components/Navbar/GlobalBackButton";
 import Home from './pages/home';
 import Convert from './pages/pitagoras';
@@ -16,6 +15,7 @@ import RankVelmedia from "./pages/RankVelmedia";
 import ChooseRank from "./pages/ChooseRank";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
+import Navbar from "./components/Navbar";
 
 const Router = () => {
     return(

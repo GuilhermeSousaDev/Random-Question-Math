@@ -28,13 +28,13 @@ const Login: FC = () => {
     const passwordRef = useRef() as MutableRefObject<HTMLInputElement>
     
     const navigate = useNavigate();
-    const { token } = useContext(AuthContext);
+    const { isAuth } = useContext(AuthContext);
 
     useEffect(() => {
-        if(token) {
+        if(isAuth) {
             navigate('/');
         }
-    }, [navigate, token]);
+    }, [navigate, isAuth]);
 
 
     const [msg, setMsg] = useState<string>('');

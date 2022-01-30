@@ -3,9 +3,12 @@ import React, {
     useEffect, 
     useRef, 
     MutableRefObject, 
-    useCallback 
+    useCallback, 
+    useContext
 } from 'react';
 import api from '../../services/axios';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../services/Context/AuthContext';
 
 import { 
     Container, 
@@ -15,6 +18,13 @@ import {
 } from '../../style/globalStyle';
 
 const Convert: React.FC = () => {
+    const navigate = useNavigate();
+    const { isAuth } = useContext(AuthContext);
+
+    if(!isAuth) {
+        navigate('/login');
+    }
+
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
     const divRefB = useRef() as MutableRefObject<HTMLDivElement>;
