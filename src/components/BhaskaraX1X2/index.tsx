@@ -20,23 +20,22 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
     const inputX1Ref = useRef() as MutableRefObject<HTMLInputElement>;
     const inputX2Ref = useRef() as MutableRefObject<HTMLInputElement>;
 
-    const [x1, setX1] = useState<number>();
-    const [x2, setX2] = useState<number>();
+    const [x1, setX1] = useState<string>();
+    const [x2, setX2] = useState<string>();
     const [msgX1, setMsgX1] = useState<string>();
     const [msgX2, setMsgX2] = useState<string>();
 
     useEffect(() => {
-        setX1((b * -1) + Math.sqrt(delta) / (2 * a))
-        setX2((b * -1) - Math.sqrt(delta) / (2 * a))
+        setX1(String((b * -1) + Math.sqrt(delta) / (2 * a)))
+        setX2(String((b * -1) - Math.sqrt(delta) / (2 * a)))
     }, [a, b, x1, x2, delta]);
 
     const submitResponse = useCallback(() => {
         const responseX1 = inputX1Ref.current.value;
         const responseX2 = inputX2Ref.current.value;
 
-        const x1String = String(x1)
-        if(x1String.includes('.')) {
-            const [integerRes, naturalRes] = x1String.split('.');
+        if(x1?.includes('.')) {
+            const [integerRes, naturalRes] = x1.split('.');
 
             if(responseX1 === integerRes || responseX1 === `${integerRes}.${naturalRes}`) {
 
@@ -55,16 +54,15 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
                 setMsgX1('Você Errou o X1 da equação!');
             }
 
+        } else {
+            responseX1 === x1? 
+                setMsgX1('Você Acertou o X1 da equação!') :
+                setMsgX1('Você Errou o X1 da equação!')
         }
 
-        Number(responseX1) === x1? 
-            setMsgX1('Você Acertou o X1 da equação!') :
-            setMsgX1('Você Errou o X1 da equação!')
-
-        const x2String = String(x2)
-        if(x2String.includes('.')) {
-            const [integerRes, naturalRes] = x2String.split('.');
-            console.log(integerRes, naturalRes)
+        if(x2?.includes('.')) {
+            const [integerRes, naturalRes] = x2.split('.');
+            
             if(responseX2 === integerRes || responseX2 === `${integerRes}.${naturalRes}`) {
                 (async () => {
                     const obj = { 
@@ -81,19 +79,22 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
                 setMsgX2('Você Errou o X2 da equação!');
             }
 
+        } else {
+            responseX2 === x2?
+                setMsgX2('Você Acertou o X2 da equação!') :
+                setMsgX2('Você Errou o X2 equação!')
         }
-        
-        Number(responseX2) === x2?
-            setMsgX2('Você Acertou o X2 da equação!') :
-            setMsgX2('Você Errou o X2 equação!')
         
     }, [x1, x2]);
 
     return(
         <>
             <Span> Encontre X1 e X2 do Δ = {delta} </Span>
+            <br />
+            <span>x1</span>
             <input type="number" ref={inputX1Ref} />
             <br />
+            <span>x2</span>
             <input type="number" ref={inputX2Ref} />
             
             <br />

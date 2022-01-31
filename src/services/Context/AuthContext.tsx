@@ -48,8 +48,6 @@ const AuthProvider: FC = ({ children }) => {
                             Authorization: localStorage.getItem('token') as any
                         }
                     })
-
-                    console.log(data)
     
                     if(status !== 200) {
                         localStorage.removeItem('token');

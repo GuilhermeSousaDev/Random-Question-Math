@@ -60,8 +60,6 @@ const Login: FC = () => {
 
         const { data } = await api.post('/login', form);
 
-        console.log(data);
-
         if(!data.user && !data.token) {
             setMsg(data);
         } else {
@@ -73,11 +71,10 @@ const Login: FC = () => {
 
     }, [form, navigate]);
 
-    const changeForm = useCallback(() => {
+    const changeForm = useCallback((e) => {
         setForm({
             ...form,
-            email: emailRef.current.value,
-            password: passwordRef.current.value,
+            [e.target.name]: e.target.value,
         })
     }, [form]);
 
