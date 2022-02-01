@@ -21,9 +21,13 @@ const Convert: React.FC = () => {
     const navigate = useNavigate();
     const { isAuth } = useContext(AuthContext);
 
-    if(!isAuth) {
-        navigate('/login');
-    }
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
+        
+        loadQuestion()
+    }, []);
 
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
@@ -33,8 +37,6 @@ const Convert: React.FC = () => {
     const [catetoB, setCatetoB] = useState<number>();
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>();
-
-    useEffect(() => loadQuestion(), []);
 
     const loadQuestion = useCallback(() => {
         const randoms = [10, 20, 30];

@@ -45,7 +45,7 @@ const AuthProvider: FC = ({ children }) => {
             setTimeout(async () => {
                     const { data, status } = await api.get<IRequest>('/token', {
                         headers: {
-                            Authorization: localStorage.getItem('token') as any
+                            Authorization: localStorage.getItem('token') as string
                         }
                     })
     

@@ -20,13 +20,24 @@ import BhaskaraX1X2 from '../../components/BhaskaraX1X2';
 import { AuthContext } from '../../services/Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
+interface IHits {
+    hitsBhaskara: number;
+    hitsPitagoras: number;
+    hitsVelmedia: number;
+}
+
 const Bhaskara: FC = () => {
     const navigate = useNavigate();
-    const { isAuth } = useContext(AuthContext);
+    const { isAuth, token } = useContext(AuthContext);
 
-    if(!isAuth) {
-        navigate('/login');
-    }
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
+        
+        loadQuestion()
+    }, []);
+
 
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
@@ -38,8 +49,11 @@ const Bhaskara: FC = () => {
     const [c, setC] = useState<number>();
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>('');
-
-    useEffect(() => loadQuestion(), []);
+    const [hits, setHits] = useState<IHits>({
+        hitsBhaskara: 0,
+        hitsPitagoras: 0,
+        hitsVelmedia: 0,
+    });
 
     const loadQuestion = useCallback(() => {
         const randoms = [10, -10, 20, -20];
@@ -65,7 +79,7 @@ const Bhaskara: FC = () => {
         inputRef.current.value = '';
     }, [a, b, c]);
 
-    const submitResponse = useCallback(() => {
+    const submitResponse = useCallback(async () => {
         const response = inputRef.current.value;
 
         if(response.length === 0) {
@@ -74,17 +88,17 @@ const Bhaskara: FC = () => {
         }
 
         if(response === res) {
-            (async () => {
-                const obj = { hitsBhaskara: 1, hitsPitagoras: 0, hitsVelmedia: 0 }
-                const request = await api.post('/question', obj)
-            })();
+            setHits({
+                ...hits,
+                hitsBhaskara: 1,
+            })
 
             setMsg('Você Acertou!');
         }else {
             setMsg('Você Errou!');
         }
         
-    }, [res]);
+    }, [res, hits]);
 
     return(
         <Container>
@@ -105,7 +119,12 @@ const Bhaskara: FC = () => {
             { 
                 res && a && b && 
                 msg ? msg === 'Você Acertou!'? 
-                    <BhaskaraX1X2 delta={Number(res)} a={a} b={b} />
+                    <BhaskaraX1X2 
+                        hits={hits}
+                        setHits={setHits}
+                        token={token as string}
+                        delta={Number(res)} 
+                        a={a} b={b} />
                     : 
                     <Response color={'#dc3545'}>{ msg }</Response>
                 : ''

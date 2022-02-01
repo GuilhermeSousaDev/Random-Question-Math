@@ -22,9 +22,13 @@ const VelMedia: FC = () => {
     const navigate = useNavigate();
     const { isAuth } = useContext(AuthContext);
 
-    if(!isAuth) {
-        navigate('/login');
-    }
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
+        
+        loadQuestion()
+    }, []);
 
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefS = useRef() as MutableRefObject<HTMLDivElement>;
@@ -34,8 +38,6 @@ const VelMedia: FC = () => {
     const [deltat, setDeltat] = useState<number>();
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>();
-
-    useEffect(() => loadQuestion(), [])
 
     const loadQuestion = useCallback(() => {
         setDeltas(Math.floor(Math.random() * (1200 - 100) - 100));

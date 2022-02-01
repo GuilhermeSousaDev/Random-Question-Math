@@ -4,18 +4,31 @@ import React, {
     useCallback,
     useRef,
     FC,
-    MutableRefObject
+    MutableRefObject,
 } from 'react';
 import api from '../../services/axios';
 import { Button, Span, Response } from '../../style/globalStyle';
 
+interface IHits {
+    hitsBhaskara: number;
+    hitsPitagoras: number;
+    hitsVelmedia: number;
+}
+
 interface IProp {
+    token: string;
     delta: number;
     b: number;
     a: number;
+    hits: {
+        hitsBhaskara: number;
+        hitsPitagoras: number;
+        hitsVelmedia: number;
+    }
+    setHits: React.Dispatch<React.SetStateAction<IHits>>;
 }
 
-const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
+const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, hits, setHits }) => {
 
     const inputX1Ref = useRef() as MutableRefObject<HTMLInputElement>;
     const inputX2Ref = useRef() as MutableRefObject<HTMLInputElement>;
@@ -30,7 +43,7 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
         setX2(String((b * -1) - Math.sqrt(delta) / (2 * a)))
     }, [a, b, x1, x2, delta]);
 
-    const submitResponse = useCallback(() => {
+    const submitResponse = useCallback(async () => {
         const responseX1 = inputX1Ref.current.value;
         const responseX2 = inputX2Ref.current.value;
 
@@ -38,16 +51,10 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
             const [integerRes, naturalRes] = x1.split('.');
 
             if(responseX1 === integerRes || responseX1 === `${integerRes}.${naturalRes}`) {
-
-                (async () => {
-                    const obj = { 
-                        hitsBhaskara: 1, 
-                        hitsPitagoras: 0, 
-                        hitsVelmedia: 0 
-                    }
-                    const request = await api.post('/question', obj);
-                    console.log(request);
-                })();
+                setHits({
+                    ...hits,
+                    hitsBhaskara: 2
+                })
 
                 setMsgX1('Você Acertou o X1 da equação!');
             }else {
@@ -55,24 +62,26 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
             }
 
         } else {
-            responseX1 === x1? 
-                setMsgX1('Você Acertou o X1 da equação!') :
+            if(responseX1 === x1) {
+                setHits({
+                    ...hits,
+                    hitsBhaskara: 2
+                })
+
+                setMsgX1('Você Acertou o X1 da equação!')
+            } else {
                 setMsgX1('Você Errou o X1 da equação!')
+            }
         }
 
         if(x2?.includes('.')) {
             const [integerRes, naturalRes] = x2.split('.');
             
             if(responseX2 === integerRes || responseX2 === `${integerRes}.${naturalRes}`) {
-                (async () => {
-                    const obj = { 
-                        hitsBhaskara: 1, 
-                        hitsPitagoras: 0, 
-                        hitsVelmedia: 0 
-                    }
-                    const request = await api.post('/question', obj);
-                    console.log(request);
-                })();
+                setHits({
+                    ...hits,
+                    hitsBhaskara: 3
+                })
                 
                 setMsgX2('Você Acertou o X2 da equação!');
             }else {
@@ -80,12 +89,25 @@ const BhaskaraX1X2: FC<IProp> = ({ delta, a, b }) => {
             }
 
         } else {
-            responseX2 === x2?
-                setMsgX2('Você Acertou o X2 da equação!') :
-                setMsgX2('Você Errou o X2 equação!')
+            if(responseX2 === x2) {
+                setHits({
+                    ...hits,
+                    hitsBhaskara: 3
+                })
+
+                setMsgX2('Você Acertou o X2 da equação!');
+            } else {
+                setMsgX2('Você Errou o X2 equação!');
+            }
         }
+
+        await api.post('/question', hits, {
+            headers: {
+                Authorization: token,
+            }
+        })
         
-    }, [x1, x2]);
+    }, [x1, x2, setHits, hits, token]);
 
     return(
         <>
