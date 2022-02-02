@@ -19,19 +19,12 @@ import {
 
 const Convert: React.FC = () => {
     const navigate = useNavigate();
-    const { isAuth } = useContext(AuthContext);
-
-    useEffect(() => {
-        if(!isAuth) {
-            navigate('/login');
-        }
-        
-        loadQuestion()
-    }, []);
+    const { isAuth, token } = useContext(AuthContext);
 
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
     const divRefB = useRef() as MutableRefObject<HTMLDivElement>;
+    const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
 
     const [catetoA, setCatetoA] = useState<number>();
     const [catetoB, setCatetoB] = useState<number>();
@@ -39,6 +32,8 @@ const Convert: React.FC = () => {
     const [msg, setMsg] = useState<string>();
 
     const loadQuestion = useCallback(() => {
+        buttonRef.current.style.display = 'block';
+
         const randoms = [10, 20, 30];
         const randomArrayIndex = Math.floor(Math.random() * randoms.length);
 
@@ -59,7 +54,17 @@ const Convert: React.FC = () => {
 
         setMsg('');
         inputRef.current.value = '';
-    }, [catetoA, catetoB])
+    }, [catetoA, catetoB]);
+
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
+        
+        loadQuestion()
+    }, [isAuth, navigate]);
+
+    
 
     const submitReponse = useCallback(() => {
         const response = inputRef.current.value;
@@ -75,12 +80,17 @@ const Convert: React.FC = () => {
             if(response === integerRes || response === integerRes + '.' + naturalRes) {
                 (async () => {
                     const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
-                    const request = await api.post('/question', obj)
-                    console.log(request)
+                    await api.post('/question', obj, {
+                        headers: {
+                            Authorization: token as string
+                        }
+                    })
                 })();
 
+                buttonRef.current.style.display = 'none';
                 setMsg('Você Acertou!');
-                return;
+
+                setTimeout(() =>  loadQuestion(), 3000);
             }else {
                 setMsg('Você Errou!');
             }
@@ -88,16 +98,20 @@ const Convert: React.FC = () => {
             if(response === res) {
                 (async () => {
                     const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
-                    const request = await api.post('/question', obj)
-                    console.log(request)
+                    await api.post('/question', obj, {
+                        headers: {
+                            Authorization: token as string
+                        }
+                    })
                 })();
+
                 setMsg('Você Acertou!');
             }else {
                 setMsg('Você Errou!');
             }
         }
 
-    }, [res]);
+    }, [res, token, loadQuestion]);
 
     return(
         <Container>
@@ -106,15 +120,15 @@ const Convert: React.FC = () => {
             <div ref={divRefA}>Cateto a: {catetoA}</div>
             <div ref={divRefB}>Cateto b: {catetoB}</div>
 
-            <p>Fórmula: a2 = b2 + c2</p>
+            <p>Fórmula: h = a2 + b2</p>
             <p>Hipotenusa = Soma dos Catetos ao quadrado</p>
 
             <h4>Resposta</h4>
             <input type="number" ref={inputRef} />
-            <Button onClick={submitReponse}>Enviar Resposta</Button>
+            <Button ref={buttonRef} onClick={submitReponse}>Enviar Resposta</Button>
             <br />
             <Button onClick={loadQuestion}>Outra Questão</Button>
-
+            {res}
             { 
                 msg ? msg === 'Você Acertou!'? 
                     <Response color={'#28a745'}>{ msg }</Response> : 

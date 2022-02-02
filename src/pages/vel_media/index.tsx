@@ -20,19 +20,12 @@ import {
 
 const VelMedia: FC = () => {
     const navigate = useNavigate();
-    const { isAuth } = useContext(AuthContext);
-
-    useEffect(() => {
-        if(!isAuth) {
-            navigate('/login');
-        }
-        
-        loadQuestion()
-    }, []);
+    const { isAuth, token } = useContext(AuthContext);
 
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
     const divRefS = useRef() as MutableRefObject<HTMLDivElement>;
     const divRefT = useRef() as MutableRefObject<HTMLDivElement>;
+    const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
 
     const [deltas, setDeltas] = useState<number>();
     const [deltat, setDeltat] = useState<number>();
@@ -40,6 +33,8 @@ const VelMedia: FC = () => {
     const [msg, setMsg] = useState<string>();
 
     const loadQuestion = useCallback(() => {
+        buttonRef.current.style.display = 'block';
+
         setDeltas(Math.floor(Math.random() * (1200 - 100) - 100));
         setDeltat(Math.floor(Math.random() * (20 - 2) - 2));
 
@@ -54,6 +49,14 @@ const VelMedia: FC = () => {
         inputRef.current.value = '';
     }, [deltas, deltat]);
 
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
+        
+        loadQuestion()
+    }, [isAuth, navigate]);
+
     const submitResponse = useCallback(() => {
         const response = inputRef.current.value;
 
@@ -63,11 +66,18 @@ const VelMedia: FC = () => {
             if(response === parsedRes || response === `${parsedRes}.${decimalRes}`) {
                 (async () => {
                     const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
-                    const request = await api.post('/question', obj)
-                    console.log(request)
+                    await api.post('/question', obj, {
+                        headers: {
+                            Authorization: token as string,
+                        }
+                    })
                 })();
 
+                buttonRef.current.style.display = 'none';
+
                 setMsg('Você Acertou!');
+
+                setTimeout(() => loadQuestion(), 3000);
             }else {
                 setMsg('Você Errou!');
             }
@@ -75,17 +85,24 @@ const VelMedia: FC = () => {
             if(response === res) {
                 (async () => {
                     const obj = { hitsBhaskara: 0, hitsPitagoras: 1, hitsVelmedia: 0 }
-                    const request = await api.post('/question', obj)
-                    console.log(request)
+                    await api.post('/question', obj, {
+                        headers: {
+                            Authorization: token as string,
+                        }
+                    })
                 })();
                 
+                buttonRef.current.style.display = 'none';
+
                 setMsg('Você Acertou!')
+
+                setTimeout(() => loadQuestion(), 3000);
             }else {
                 setMsg('Você Errou!')
             }
         }
 
-    }, [res]);
+    }, [res, token, loadQuestion]);
 
     return(
         <Container>
@@ -98,9 +115,10 @@ const VelMedia: FC = () => {
 
             <h4>Resposta</h4>
             <input type="number" ref={inputRef} />
-            <Button onClick={submitResponse}>Enviar Resposta</Button>
+            <Button ref={buttonRef} onClick={submitResponse}>Enviar Resposta</Button>
             <br />
             <Button onClick={loadQuestion}>Outra Questão</Button>
+            {res}
             {
                 msg? msg === 'Você Acertou!'? 
                     <Response color={'#28a745'}>{ msg }</Response> : 
