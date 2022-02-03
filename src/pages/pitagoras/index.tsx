@@ -22,8 +22,6 @@ const Convert: React.FC = () => {
     const { isAuth, token } = useContext(AuthContext);
 
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
-    const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
-    const divRefB = useRef() as MutableRefObject<HTMLDivElement>;
     const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
 
     const [catetoA, setCatetoA] = useState<number>();
@@ -31,14 +29,19 @@ const Convert: React.FC = () => {
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>();
 
-    const loadQuestion = useCallback(() => {
-        buttonRef.current.style.display = 'block';
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
 
         const randoms = [10, 20, 30];
         const randomArrayIndex = Math.floor(Math.random() * randoms.length);
 
-        setCatetoA(Math.floor(Math.random() * randoms[randomArrayIndex]))
-        setCatetoB(Math.floor(Math.random() * randoms[randomArrayIndex]))
+        if(!catetoA && !catetoB) {
+            setCatetoA(Math.floor(Math.random() * randoms[randomArrayIndex]));
+            setCatetoB(Math.floor(Math.random() * randoms[randomArrayIndex]));
+           
+        }
 
         if(catetoA && catetoB) {
             setRes(
@@ -47,24 +50,31 @@ const Convert: React.FC = () => {
                         Math.pow(catetoA, 2) + Math.pow(catetoB, 2)
                     )
                 ));
+                console.log(catetoA, catetoB, res)
+        }
+    }, [isAuth, navigate, catetoA, catetoB, res]);
 
-            divRefA.current.innerHTML = `Cateto a: ${String(catetoA)}`;
-            divRefB.current.innerHTML = `Cateto b: ${String(catetoB)}`;
+    const loadQuestion = useCallback(() => {
+        buttonRef.current.style.display = 'block';
+
+        const randoms = [10, 20, 30];
+        const randomArrayIndex = Math.floor(Math.random() * randoms.length);
+
+        setCatetoA(Math.floor(Math.random() * randoms[randomArrayIndex]));
+        setCatetoB(Math.floor(Math.random() * randoms[randomArrayIndex]));
+
+        if(catetoA && catetoB) {
+            setRes(
+                String(
+                    Math.sqrt(
+                        Math.pow(catetoA, 2) + Math.pow(catetoB, 2)
+                    )
+                ));
         }
 
         setMsg('');
         inputRef.current.value = '';
     }, [catetoA, catetoB]);
-
-    useEffect(() => {
-        if(!isAuth) {
-            navigate('/login');
-        }
-        
-        loadQuestion()
-    }, [isAuth, navigate]);
-
-    
 
     const submitReponse = useCallback(() => {
         const response = inputRef.current.value;
@@ -117,8 +127,8 @@ const Convert: React.FC = () => {
         <Container>
             <Title> Resolva a Questão <hr /> <span>Teorema de Pitágoras</span> </Title>
 
-            <div ref={divRefA}>Cateto a: {catetoA}</div>
-            <div ref={divRefB}>Cateto b: {catetoB}</div>
+            <div>Cateto a: {catetoA}</div>
+            <div>Cateto b: {catetoB}</div>
 
             <p>Fórmula: h = a2 + b2</p>
             <p>Hipotenusa = Soma dos Catetos ao quadrado</p>
@@ -136,18 +146,6 @@ const Convert: React.FC = () => {
                 : ''
             }
             <br />
-            
-            {!msg? 
-                res? 
-                    <Response color={'#28a745'}>
-                        Resposta Pronta, Tente Resolver
-                    </Response> 
-                    : 
-                    <Response color={'#dc3545'}>
-                        Erro ao calcular resposta, carregue outra questão
-                    </Response>
-                : ''
-            }
         </Container>
     )
 }

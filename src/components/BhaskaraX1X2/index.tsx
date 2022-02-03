@@ -20,40 +20,62 @@ interface IProp {
     delta: number;
     b: number;
     a: number;
-    hits: {
-        hitsBhaskara: number;
-        hitsPitagoras: number;
-        hitsVelmedia: number;
-    }
-    setHits: React.Dispatch<React.SetStateAction<IHits>>;
+    loadQuestion: () => void
 }
 
-const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, hits, setHits }) => {
+const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, loadQuestion }) => {
 
     const inputX1Ref = useRef() as MutableRefObject<HTMLInputElement>;
     const inputX2Ref = useRef() as MutableRefObject<HTMLInputElement>;
+    const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
 
     const [x1, setX1] = useState<string>();
     const [x2, setX2] = useState<string>();
     const [msgX1, setMsgX1] = useState<string>();
     const [msgX2, setMsgX2] = useState<string>();
+    const [hits, setHits] = useState<IHits>({
+        hitsBhaskara: 0,
+        hitsPitagoras: 0,
+        hitsVelmedia: 0,
+    })
 
     useEffect(() => {
-        setX1(String((b * -1) + Math.sqrt(delta) / (2 * a)))
-        setX2(String((b * -1) - Math.sqrt(delta) / (2 * a)))
-    }, [a, b, x1, x2, delta]);
+        if(a && b) {
+            setX1(String((b * -1) + Math.sqrt(delta) / (2 * a)))
+            setX2(String((b * -1) - Math.sqrt(delta) / (2 * a)))
+        }
+
+        (async () => {
+            if(hits.hitsBhaskara !== 0) {
+                await api.post('/question', hits, {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+            }
+        })();
+
+        if(msgX1 && msgX2) {
+            setTimeout(() => loadQuestion(), 3000);
+        }
+
+    }, [a, b, x1, x2, delta, hits, token, msgX1, msgX2, loadQuestion]);
 
     const submitResponse = useCallback(async () => {
         const responseX1 = inputX1Ref.current.value;
         const responseX2 = inputX2Ref.current.value;
 
+        buttonRef.current.style.display = 'none';
+
         if(x1?.includes('.')) {
             const [integerRes, naturalRes] = x1.split('.');
 
             if(responseX1 === integerRes || responseX1 === `${integerRes}.${naturalRes}`) {
-                setHits({
-                    ...hits,
-                    hitsBhaskara: 2
+                setHits((prev) => {
+                    return {
+                        ...hits,
+                        hitsBhaskara: prev.hitsBhaskara + 1
+                    }
                 })
 
                 setMsgX1('Você Acertou o X1 da equação!');
@@ -63,9 +85,11 @@ const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, hits, setHits }) => {
 
         } else {
             if(responseX1 === x1) {
-                setHits({
-                    ...hits,
-                    hitsBhaskara: 2
+                setHits((prev) => {
+                    return {
+                        ...hits,
+                        hitsBhaskara: prev.hitsBhaskara + 1
+                    }
                 })
 
                 setMsgX1('Você Acertou o X1 da equação!')
@@ -78,9 +102,11 @@ const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, hits, setHits }) => {
             const [integerRes, naturalRes] = x2.split('.');
             
             if(responseX2 === integerRes || responseX2 === `${integerRes}.${naturalRes}`) {
-                setHits({
-                    ...hits,
-                    hitsBhaskara: 3
+                setHits((prev) => {
+                    return {
+                        ...hits,
+                        hitsBhaskara: prev.hitsBhaskara + 1
+                    }
                 })
                 
                 setMsgX2('Você Acertou o X2 da equação!');
@@ -90,9 +116,11 @@ const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, hits, setHits }) => {
 
         } else {
             if(responseX2 === x2) {
-                setHits({
-                    ...hits,
-                    hitsBhaskara: 3
+                setHits((prev) => {
+                    return {
+                        ...hits,
+                        hitsBhaskara: prev.hitsBhaskara + 1
+                    }
                 })
 
                 setMsgX2('Você Acertou o X2 da equação!');
@@ -100,14 +128,7 @@ const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, hits, setHits }) => {
                 setMsgX2('Você Errou o X2 equação!');
             }
         }
-
-        await api.post('/question', hits, {
-            headers: {
-                Authorization: token,
-            }
-        })
-        
-    }, [x1, x2, setHits, hits, token]);
+    }, [hits, x1, x2]);
 
     return(
         <>
@@ -132,10 +153,8 @@ const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, hits, setHits }) => {
                 <Response color={'#dc3545'}>{ msgX2 }</Response> 
                 : ''
             }
-
-            {console.log(x1, x2)}
             
-            <Button onClick={submitResponse}>Enviar</Button>
+            <Button ref={buttonRef} onClick={submitResponse}>Enviar</Button>
         </>
     )
 }

@@ -30,19 +30,8 @@ const Bhaskara: FC = () => {
     const navigate = useNavigate();
     const { isAuth, token } = useContext(AuthContext);
 
-    useEffect(() => {
-        if(!isAuth) {
-            navigate('/login');
-        }
-        
-        loadQuestion()
-    }, []);
-
-
     const inputRef = useRef() as MutableRefObject<HTMLInputElement>;
-    const divRefA = useRef() as MutableRefObject<HTMLDivElement>;
-    const divRefB = useRef() as MutableRefObject<HTMLDivElement>;
-    const divRefC = useRef() as MutableRefObject<HTMLDivElement>;
+    const buttonRef = useRef() as MutableRefObject<HTMLButtonElement>;
 
     const [a, setA] = useState<number>();
     const [b, setB] = useState<number>();
@@ -56,6 +45,8 @@ const Bhaskara: FC = () => {
     });
 
     const loadQuestion = useCallback(() => {
+        buttonRef.current.style.display = 'block';
+
         const randoms = [10, -10, 20, -20];
         const randomArrayIndex = Math.floor(Math.random() * randoms.length);
         const otherRandomArrayIndex = Math.floor(Math.random() * randoms.length);
@@ -70,16 +61,36 @@ const Bhaskara: FC = () => {
 
         if(a && b && c) {
             setRes(String(Math.pow(b, 2) - (4 * a * c)))
-            divRefA.current.innerHTML = `a: ${String(a)}`;
-            divRefB.current.innerHTML = `b: ${String(b)}`;
-            divRefC.current.innerHTML = `c: ${String(c)}`;
         }
 
         setMsg('');
         inputRef.current.value = '';
     }, [a, b, c]);
 
-    const submitResponse = useCallback(async () => {
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
+
+        const randoms = [10, -10, 20, -20];
+        const randomArrayIndex = Math.floor(Math.random() * randoms.length);
+        const otherRandomArrayIndex = Math.floor(Math.random() * randoms.length);
+
+        const randomCoefficientA = [1, -1, 10];
+        const randomCoefficientArrayIndex = Math.floor(Math.random() * randomCoefficientA.length);
+
+        if(!a && !b && !c) {  
+            setA(Math.floor(Math.random() * randomCoefficientA[randomCoefficientArrayIndex]));
+            setB(Math.floor(Math.random() * randoms[randomArrayIndex]));
+            setC(Math.floor(Math.random() * randoms[otherRandomArrayIndex]));
+        }
+
+        if(a && b && c) {
+            setRes(String(Math.pow(b, 2) - (4 * a * c)))
+        }
+    }, [a, b, c, res , isAuth, navigate]);
+
+    const submitResponse = async () => {
         const response = inputRef.current.value;
 
         if(response.length === 0) {
@@ -93,26 +104,34 @@ const Bhaskara: FC = () => {
                 hitsBhaskara: 1,
             })
 
+            await api.post('/question', hits, {
+                headers: {
+                    Authorization: token as string,
+                }
+            })
+
+            buttonRef.current.style.display = 'none';
+
             setMsg('Você Acertou!');
         }else {
             setMsg('Você Errou!');
         }
         
-    }, [res, hits]);
+    };
 
     return(
         <Container>
             <Title> Resolva a Questão <hr /> <p>Equação do 2 Grau</p> </Title>
 
-            <div ref={divRefA}> a: {a}</div>
-            <div ref={divRefB}> b: {b}</div>
-            <div ref={divRefC}> c: {c}</div>
+            <div> a: {a}</div>
+            <div> b: {b}</div>
+            <div> c: {c}</div>
             <p>Δ = b**2 - 4 . a . c</p>
 
             <h4>Resposta</h4>
             <input type="number" ref={inputRef} />
 
-            <Button onClick={submitResponse}>Enviar Resposta</Button>
+            <Button ref={buttonRef} onClick={submitResponse}>Enviar Resposta</Button>
             <br />
             <Button onClick={loadQuestion}>Outra Questão</Button>
 
@@ -120,8 +139,7 @@ const Bhaskara: FC = () => {
                 res && a && b && 
                 msg ? msg === 'Você Acertou!'? 
                     <BhaskaraX1X2 
-                        hits={hits}
-                        setHits={setHits}
+                        loadQuestion={loadQuestion}
                         token={token as string}
                         delta={Number(res)} 
                         a={a} b={b} />
@@ -131,18 +149,6 @@ const Bhaskara: FC = () => {
             }
             <br />
             {res}
-            
-            {!msg? 
-                res? 
-                    <Response color={'#28a745'}>
-                        Resposta Pronta, Tente Resolver
-                    </Response> 
-                    : 
-                    <Response color={'#dc3545'}>
-                        Erro ao calcular resposta, carregue outra questão
-                    </Response>
-                : ''
-            }
         </Container>
     )
 }

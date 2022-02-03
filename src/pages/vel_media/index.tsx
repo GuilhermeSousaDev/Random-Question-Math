@@ -32,6 +32,22 @@ const VelMedia: FC = () => {
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>();
 
+    useEffect(() => {
+        if(!isAuth) {
+            navigate('/login');
+        }
+
+        if(!deltas && !deltat) {
+            setDeltas(Math.floor(Math.random() * (1200 - 100) - 100));
+            setDeltat(Math.floor(Math.random() * (20 - 2) - 2));
+        }
+
+        if(deltas && deltat) {
+            const val = deltas / deltat
+            setRes(String(val));
+        }
+    }, [isAuth, navigate, deltas, deltat, res]);
+
     const loadQuestion = useCallback(() => {
         buttonRef.current.style.display = 'block';
 
@@ -41,21 +57,11 @@ const VelMedia: FC = () => {
         if(deltas && deltat) {
             const val = deltas / deltat
             setRes(String(val));
-            divRefS.current.innerHTML = `Δs: ${String(deltas)}`;
-            divRefT.current.innerHTML = `Δt: ${String(deltat)}`;
         }
 
         setMsg('');
         inputRef.current.value = '';
     }, [deltas, deltat]);
-
-    useEffect(() => {
-        if(!isAuth) {
-            navigate('/login');
-        }
-        
-        loadQuestion()
-    }, [isAuth, navigate]);
 
     const submitResponse = useCallback(() => {
         const response = inputRef.current.value;
@@ -123,18 +129,6 @@ const VelMedia: FC = () => {
                 msg? msg === 'Você Acertou!'? 
                     <Response color={'#28a745'}>{ msg }</Response> : 
                     <Response color={'#dc3545'}>{ msg }</Response>
-                : ''
-            }
-            
-            {!msg? 
-                res? 
-                    <Response color={'#28a745'}>
-                        Resposta Pronta, Tente Resolver
-                    </Response> 
-                    : 
-                    <Response color={'#dc3545'}>
-                        Erro ao calcular resposta, carregue outra questão
-                    </Response>
                 : ''
             }
         </Container>
