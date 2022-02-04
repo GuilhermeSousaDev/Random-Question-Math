@@ -16,6 +16,7 @@ import ChooseRank from "./pages/ChooseRank";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import Navbar from "./components/Navbar";
+import Profile from "./pages/Profile";
 
 const Router = () => {
     return(
@@ -33,6 +34,7 @@ const Router = () => {
                     <Route path="rank" element={<ChooseRank />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/perfil" element={<Profile />} />
                 </Routes>
                 <GlobalBackButton />
             </BrowserRouter>

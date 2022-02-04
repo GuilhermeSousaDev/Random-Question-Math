@@ -13,11 +13,8 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     body, textarea {
-        font-family: 'Bebas Neue', cursive;
-        letter-spacing: 1px;
-    }
-    button, p {
         font-family: 'Spline Sans', sans-serif;
+        letter-spacing: 1px;
     }
 
     #root {
