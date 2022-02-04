@@ -54,7 +54,7 @@ const Profile: FC = () => {
             <List>
                 <li>Name: {profile?.user.name}</li>
                 {userData?.avatar?
-                    <img src="" alt="" /> :
+                    <img src={`http://localhost:8081/files/${userData?.avatar}`} alt="" /> :
                     <img src={DefaultImg} alt="default_image" />
                 }
                 <br />
