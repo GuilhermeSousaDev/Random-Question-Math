@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { List, Container } from './style';
 
-
 interface IUser {
     id: string;
     name: string;

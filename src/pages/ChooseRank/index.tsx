@@ -12,6 +12,7 @@ const ChooseRank: FC = () => {
                     <Link to={'/rank/bhaskara'}>Bhaskara</Link>
                     <Link to={'/rank/pitagoras'}>Pitágoras</Link>
                     <Link to={'/rank/vel_media'}>Velocidade média</Link>
+                    <Link to={'/rank/all'}>Todos</Link>
                 </div>
             </Rank>
         </Container>

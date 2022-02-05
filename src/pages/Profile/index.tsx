@@ -39,8 +39,8 @@ const Profile: FC = () => {
 
     useEffect(() => {
         (async () => {
-            const request_user = await api.get(`/user/${user?.id}`);
-            const request_hits = await api.get(`/question/${user?.id}`);
+            const request_user = await api.get<IUser>(`/user/${user?.id}`);
+            const request_hits = await api.get<IHits>(`/question/${user?.id}`);
 
             setProfile(request_hits.data);
             setUserData(request_user.data);
@@ -50,20 +50,27 @@ const Profile: FC = () => {
     return(
         <Container>
             <Title> Perfil <hr /> <p>{profile?.user.name}</p> </Title>
-
             <List>
-                <li>Name: {profile?.user.name}</li>
-                {userData?.avatar?
-                    <img src={`http://localhost:8081/files/${userData?.avatar}`} alt="" /> :
-                    <img src={DefaultImg} alt="default_image" />
+                {userData && profile?  
+                    <>
+                        <li>Name: {profile.user.name}</li>
+                        {userData.avatar? 
+                            <img 
+                                src={`http://localhost:8081/files/${userData.avatar}`} 
+                                alt={userData.avatar} /> : 
+                            <img src={DefaultImg} alt="default_image" />
+                        }
+                        <br />
+                        <h3>Acertos</h3>
+                        <li>Bhaskara: {profile.hitsBhaskara}</li>
+                        <li>Pitagoras: {profile.hitsPitagoras}</li>
+                        <li>Velocidade média: {profile.hitsVelmedia}</li>
+                        <li>Criado em: {userData.createdAt}</li>
+                        <li>id: {userData.id}</li>
+                    </>
+                    : 
+                    <p>...Loading</p>
                 }
-                <br />
-                <h3>Acertos</h3>
-                <li>Bhaskara: {profile?.hitsBhaskara}</li>
-                <li>Pitagoras: {profile?.hitsPitagoras}</li>
-                <li>Velocidade média: {profile?.hitsVelmedia}</li>
-                <li>Criado em: {userData?.createdAt}</li>
-                <li>id: {userData?.id}</li>
             </List>
             <Button>Editar</Button>
         </Container>
