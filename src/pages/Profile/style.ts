@@ -20,9 +20,13 @@ export const List = styled.ul`
     }
 `;
 
+export const LiImage = styled.li`
+    cursor: pointer;
+`;
+
 export const Button = styled.button`
     display: inline-block;
-    background-color: #007bff;;
+    background-color: ${(props) => props.color};
     border-color: #343a40;
     font-weight: 400;
     text-align: center;

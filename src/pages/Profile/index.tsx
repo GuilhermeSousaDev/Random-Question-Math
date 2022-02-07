@@ -7,8 +7,9 @@ import React, {
 import api from '../../services/axios';
 import { AuthContext } from '../../services/Context/AuthContext';
 import { Container, Title } from '../../style/globalStyle';
-import { Button, List } from './style';
+import { Button,LiImage, List } from './style';
 import DefaultImg from '../../images/perfil.png';
+import Modal from '../../components/Modal';
 
 interface IUser {
     id: string
@@ -36,6 +37,7 @@ const Profile: FC = () => {
 
     const [userData, setUserData] = useState<IUser | null>(null);
     const [profile, setProfile] = useState<IHits | null>(null);
+    const [modal, setModal] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -47,6 +49,12 @@ const Profile: FC = () => {
         })();
     }, [user]);
 
+    const showModal = () => {
+        modal === true?
+            setModal(false) :
+            setModal(true)
+    }
+
     return(
         <Container>
             <Title> Perfil <hr /> <p>{profile?.user.name}</p> </Title>
@@ -54,12 +62,15 @@ const Profile: FC = () => {
                 {userData && profile?  
                     <>
                         <li>Name: {profile.user.name}</li>
-                        {userData.avatar? 
-                            <img 
-                                src={`http://localhost:8081/files/${userData.avatar}`} 
-                                alt={userData.avatar} /> : 
-                            <img src={DefaultImg} alt="default_image" />
-                        }
+                        <LiImage onClick={showModal}>
+                            {userData.avatar? 
+                                <img 
+                                    src={`http://localhost:8081/files/${userData.avatar}`} 
+                                    alt={userData.avatar} /> : 
+                                <img src={DefaultImg} alt="default_image" />
+                            }
+                        </LiImage>
+                        { modal? <Modal /> : ''}
                         <br />
                         <h3>Acertos</h3>
                         <li>Bhaskara: {profile.hitsBhaskara}</li>
