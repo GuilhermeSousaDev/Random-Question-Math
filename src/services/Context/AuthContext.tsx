@@ -10,6 +10,7 @@ interface IAuth {
     user?: {
         id: string;
         name: string;
+        avatar: string;
     }
     token: string | null;
     isAuth: boolean;
@@ -18,6 +19,7 @@ interface IAuth {
 interface IUser {
     id: string;
     name: string;
+    avatar: string;
 }
 
 interface IRequest {
@@ -29,6 +31,7 @@ const AuthContext = createContext<IAuth>({
     user: {
         id: '',
         name: '',
+        avatar: '',
     },
     token: '',
     isAuth: false,
@@ -58,6 +61,7 @@ const AuthProvider: FC = ({ children }) => {
                         setUser({ 
                             id: data.tokenVerified.id,
                             name: data.tokenVerified.name,
+                            avatar: data.tokenVerified.avatar? data.tokenVerified.avatar : ''
                         })
                         setToken(data.token);
                     }
