@@ -18,6 +18,7 @@ import Register from "./pages/Auth/Register";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import RankAll from "./pages/RankAll";
+import EditProfile from "./pages/EditProfile";
 
 const Router = () => {
     return(
@@ -37,6 +38,7 @@ const Router = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/perfil" element={<Profile />} />
+                    <Route path="/perfil/edit/:id" element={<EditProfile />} />
                 </Routes>
                 <GlobalBackButton />
             </BrowserRouter>

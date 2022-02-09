@@ -1,0 +1,104 @@
+import React, { 
+    FC,
+    useState,
+    useEffect,
+    useContext,
+    useCallback,
+} from 'react';
+import api from '../../services/axios';
+import { Container, Title } from '../../style/globalStyle';
+import { Button, LiImage, List } from '../Profile/style';
+import { useParams } from 'react-router-dom';
+
+interface IUser {
+    id: string
+    name: string;
+    email: string;
+    password: string;
+    avatar: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+interface IForm {
+    [key: string]: string;
+}
+
+const EditProfile: FC = () => {
+    const { id } = useParams();
+
+    const [userData, setUserData] = useState<IUser | null>(null);
+    const [form, setForm] = useState<IForm>();
+
+    useEffect(() => {
+        (async () => {
+            const request_user = await api.get<IUser>(`/user/${id}`);
+
+            setUserData(request_user.data);
+        })();
+    }, [id]);
+
+    const changeData = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value,
+        })
+
+        console.log(form);
+    };
+
+    const getFormData = async () => {
+        console.log(form);
+
+        //const request = await api.put('/profile')
+    }
+
+    return(
+        <Container>
+            <Title> Edit Perfil <hr /> <p>{userData?.name}</p> </Title>
+            <List>
+                {userData?  
+                    <>
+                        <p>Name: </p>
+                        <input 
+                            type="text" 
+                            name="name" 
+                            placeholder={userData.name}
+                            onChange={changeData}
+                        />
+                        <p>Email: </p>
+                        <input 
+                            type="text" 
+                            name="email"
+                            placeholder={userData.email}  
+                            onChange={changeData}
+                        />
+                        <p>Senha Antiga: </p>
+                        <input 
+                            type="text" 
+                            name='old_password' 
+                            onChange={changeData}
+                        />
+                        <p>Nova Senha: </p>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            onChange={changeData}
+                        />
+
+                    </>
+                    : 
+                    <p>...Loading</p>
+                }
+            </List>
+            <Button
+             color={'#28a745'}
+             onClick={getFormData}
+            >
+                Confirmar
+            </Button>
+        </Container>
+    );
+}
+
+export default EditProfile;

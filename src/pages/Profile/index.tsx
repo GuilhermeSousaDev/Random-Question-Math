@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import api from '../../services/axios';
 import { AuthContext } from '../../services/Context/AuthContext';
+import { Link } from 'react-router-dom';
 import { Container, Title } from '../../style/globalStyle';
 import { Button,LiImage, List } from './style';
 import DefaultImg from '../../images/perfil.png';
@@ -83,7 +84,9 @@ const Profile: FC = () => {
                     <p>...Loading</p>
                 }
             </List>
-            <Button>Editar</Button>
+            <Link to={`/perfil/edit/${userData?.id}`}>
+                <Button>Editar</Button>
+            </Link>
         </Container>
     );
 }
