@@ -62,7 +62,8 @@ const AuthProvider: FC = ({ children }) => {
                             id: data.tokenVerified.id,
                             name: data.tokenVerified.name,
                             avatar: data.tokenVerified.avatar? data.tokenVerified.avatar : ''
-                        })
+                        });
+                        console.log(user)
                         setToken(data.token);
                     }
             }, 500)

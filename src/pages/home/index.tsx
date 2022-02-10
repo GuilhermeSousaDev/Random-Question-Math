@@ -2,7 +2,7 @@ import React, {
     FC, 
     MutableRefObject, 
     useCallback, 
-    useRef
+    useRef,
 } from 'react';
 import { Link } from 'react-router-dom';
 import { Button,Title } from '../../style/globalStyle';

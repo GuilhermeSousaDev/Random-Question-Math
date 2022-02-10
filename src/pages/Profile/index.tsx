@@ -7,7 +7,7 @@ import React, {
 import api from '../../services/axios';
 import { AuthContext } from '../../services/Context/AuthContext';
 import { Link } from 'react-router-dom';
-import { Container, Title } from '../../style/globalStyle';
+import { Container, Response, Title } from '../../style/globalStyle';
 import { Button,LiImage, List } from './style';
 import DefaultImg from '../../images/perfil.png';
 import Modal from '../../components/Modal';
@@ -21,31 +21,34 @@ interface IUser {
 }
 
 interface IHits {
-    id: string
     hitsBhaskara: number;
     hitsPitagoras: number;
     hitsVelmedia: number;
-    user: {
-        id: string;
-        name: string;
-    }
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 const Profile: FC = () => {
     const { user } = useContext(AuthContext);
 
     const [userData, setUserData] = useState<IUser | null>(null);
-    const [profile, setProfile] = useState<IHits | null>(null);
+    const [profile, setProfile] = useState<IHits>({
+        hitsBhaskara: 0,
+        hitsPitagoras: 0,
+        hitsVelmedia: 0,
+    });
     const [modal, setModal] = useState<boolean>(false);
+    const [msg, setMsg] = useState<string>('');
 
     useEffect(() => {
         (async () => {
+            const request_hits = await api.get(`/question/${user?.id}`);
             const request_user = await api.get<IUser>(`/user/${user?.id}`);
-            const request_hits = await api.get<IHits>(`/question/${user?.id}`);
+            
+            if(request_hits.data === 'This hit profile does not exist') {
+                setMsg('Você ainda não tem um perfil de questões');
+            } else {
+                setProfile(request_hits.data);
+            }
 
-            setProfile(request_hits.data);
             setUserData(request_user.data);
         })();
     }, [user]);
@@ -58,11 +61,15 @@ const Profile: FC = () => {
 
     return(
         <Container>
-            <Title> Perfil <hr /> <p>{profile?.user.name}</p> </Title>
+            <Title> Perfil <hr /> <p>{userData?.name}</p> </Title>
             <List>
-                {userData && profile?  
+                {msg?
+                    <Response color={'#dc3545'}>{msg}</Response> :
+                    ''
+                }
+                {userData?  
                     <>
-                        <li>Name: {profile.user.name}</li>
+                        <li>Name: {userData.name}</li>
                         <LiImage onClick={showModal}>
                             {userData.avatar? 
                                 <img 
