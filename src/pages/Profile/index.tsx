@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import api from '../../services/axios';
 import { AuthContext } from '../../services/Context/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Container, Response, Title } from '../../style/globalStyle';
 import { Button,LiImage, List } from './style';
 import DefaultImg from '../../images/perfil.png';
@@ -27,7 +27,8 @@ interface IHits {
 }
 
 const Profile: FC = () => {
-    const { user } = useContext(AuthContext);
+    const { user, handleLogout, isAuth } = useContext(AuthContext);
+    const navigate = useNavigate();
 
     const [userData, setUserData] = useState<IUser | null>(null);
     const [profile, setProfile] = useState<IHits>({
@@ -40,6 +41,10 @@ const Profile: FC = () => {
 
     useEffect(() => {
         (async () => {
+            if(!isAuth) {
+                navigate('/login');
+            }
+
             const request_hits = await api.get(`/question/${user?.id}`);
             const request_user = await api.get<IUser>(`/user/${user?.id}`);
             
@@ -51,7 +56,7 @@ const Profile: FC = () => {
 
             setUserData(request_user.data);
         })();
-    }, [user]);
+    }, [user, navigate, isAuth]);
 
     const showModal = () => {
         modal === true?
@@ -94,6 +99,8 @@ const Profile: FC = () => {
             <Link to={`/perfil/edit/${userData?.id}`}>
                 <Button>Editar</Button>
             </Link>
+            <br />
+            <Button onClick={handleLogout} color={'#dc3545'}>Desconectar</Button>
         </Container>
     );
 }

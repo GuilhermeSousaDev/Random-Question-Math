@@ -97,13 +97,13 @@ const EditProfile: FC = () => {
                         />
                         <p>Nova Senha: </p>
                         <input 
-                            type="password" 
+                            type="text" 
                             name="password" 
                             onChange={changeData}
                         />
                         <p>Confirmar Senha: </p>
                         <input 
-                            type="password" 
+                            type="text" 
                             name="password_confirmation" 
                             onChange={changeData}
                         />

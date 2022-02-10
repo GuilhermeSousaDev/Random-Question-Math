@@ -153,6 +153,9 @@ const BhaskaraX1X2: FC<IProp> = ({ token, delta, a, b, loadQuestion }) => {
                 <Response color={'#dc3545'}>{ msgX2 }</Response> 
                 : ''
             }
+
+            {x1}
+            {x2}
             
             <Button ref={buttonRef} onClick={submitResponse}>Enviar</Button>
         </>

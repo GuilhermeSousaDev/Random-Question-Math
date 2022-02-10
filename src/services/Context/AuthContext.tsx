@@ -14,6 +14,7 @@ interface IAuth {
     }
     token: string | null;
     isAuth: boolean;
+    handleLogout?: () =>void;
 }
 
 interface IUser {
@@ -27,6 +28,7 @@ interface IRequest {
     tokenVerified: IUser;
 }
 
+//default value
 const AuthContext = createContext<IAuth>({
     user: {
         id: '',
@@ -38,10 +40,16 @@ const AuthContext = createContext<IAuth>({
 });
 
 const AuthProvider: FC = ({ children }) => {
-
-    const [token, setToken] = useState<string | null>(null);
-    const [user, setUser] = useState<IUser>();
     const [isAuth, setIsAuth] = useState<boolean>(false);
+    const [user, setUser] = useState<IUser | undefined>();
+    const [token, setToken] = useState<string | null>(null);
+
+    const handleLogout = () => {
+        setIsAuth(false);
+        setUser(undefined);
+        setToken(null);
+        localStorage.removeItem('token');
+    };
 
     useEffect(() => {
         if(localStorage.getItem('token')) {
@@ -63,7 +71,6 @@ const AuthProvider: FC = ({ children }) => {
                             name: data.tokenVerified.name,
                             avatar: data.tokenVerified.avatar? data.tokenVerified.avatar : ''
                         });
-                        console.log(user)
                         setToken(data.token);
                     }
             }, 500)
@@ -71,7 +78,7 @@ const AuthProvider: FC = ({ children }) => {
     }, [token]);
 
     return(
-        <AuthContext.Provider value={{ token, isAuth, user }}>
+        <AuthContext.Provider value={{ token, isAuth, user, handleLogout }}>
             {children}
         </AuthContext.Provider>
     )

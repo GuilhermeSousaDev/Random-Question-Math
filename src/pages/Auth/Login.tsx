@@ -66,7 +66,7 @@ const Login: FC = () => {
             localStorage.setItem('token', data.token);
             navigate('/');
             // eslint-disable-next-line no-restricted-globals
-            location.reload()
+            location.reload();
         }
 
     }, [form, navigate]);

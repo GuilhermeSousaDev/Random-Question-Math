@@ -20,12 +20,6 @@ import BhaskaraX1X2 from '../../components/BhaskaraX1X2';
 import { AuthContext } from '../../services/Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-interface IHits {
-    hitsBhaskara: number;
-    hitsPitagoras: number;
-    hitsVelmedia: number;
-}
-
 const Bhaskara: FC = () => {
     const navigate = useNavigate();
     const { isAuth, token } = useContext(AuthContext);
@@ -38,11 +32,6 @@ const Bhaskara: FC = () => {
     const [c, setC] = useState<number>();
     const [res, setRes] = useState<string>();
     const [msg, setMsg] = useState<string>('');
-    const [hits, setHits] = useState<IHits>({
-        hitsBhaskara: 0,
-        hitsPitagoras: 0,
-        hitsVelmedia: 0,
-    });
 
     const loadQuestion = useCallback(() => {
         buttonRef.current.style.display = 'block';
@@ -99,10 +88,11 @@ const Bhaskara: FC = () => {
         }
 
         if(response === res) {
-            setHits({
-                ...hits,
+            const hits = {
                 hitsBhaskara: 1,
-            })
+                hitsPitagoras: 0,
+                hitsVelmedia: 0,
+            }
 
             await api.post('/question', hits, {
                 headers: {
