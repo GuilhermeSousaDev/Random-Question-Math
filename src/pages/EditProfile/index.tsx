@@ -3,7 +3,6 @@ import React, {
     useState,
     useEffect,
     useContext,
-    useCallback,
     ChangeEvent,
 } from 'react';
 import api from '../../services/axios';
@@ -11,6 +10,7 @@ import { Container, Response, Title } from '../../style/globalStyle';
 import { Button, List } from '../Profile/style';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../services/Context/AuthContext';
+import DeleteAccountModal from '../../components/Modal/deleteAccountModal';
 
 interface IUser {
     id: string
@@ -34,6 +34,7 @@ const EditProfile: FC = () => {
     const [userData, setUserData] = useState<IUser | null>(null);
     const [form, setForm] = useState<IForm>();
     const [msg, setMsg] = useState<string>('');
+    const [modal, setModal] = useState<boolean>(false);
 
     useEffect(() => {
         (async () => {
@@ -64,12 +65,23 @@ const EditProfile: FC = () => {
         }
     }
 
+    const showModal = () => {
+        setModal(true);
+    };
+
     return(
         <Container>
+            {modal? 
+                <DeleteAccountModal 
+                    id={id}
+                    setModal={setModal} 
+                    /> 
+                : ''
+            }
             <Title> Edit Perfil <hr /> <p>{userData?.name}</p> </Title>
             <List>
                 {msg? 
-                    <Response color={'#dc3545'} >{msg}</Response> 
+                    <Response color={'#dc3545'}>{msg}</Response> 
                     : ''
                 }
                 <br />
@@ -119,6 +131,13 @@ const EditProfile: FC = () => {
             >
                 Confirmar
             </Button>
+            <br />  
+            <Button 
+                color={'#dc3545'}
+                onClick={showModal}
+                >
+                Excluir Conta
+            </Button>    
         </Container>
     );
 }

@@ -14,7 +14,7 @@ interface IAuth {
     }
     token: string | null;
     isAuth: boolean;
-    handleLogout?: () =>void;
+    handleLogout: () =>void;
 }
 
 interface IUser {
@@ -37,6 +37,7 @@ const AuthContext = createContext<IAuth>({
     },
     token: '',
     isAuth: false,
+    handleLogout: () => false,
 });
 
 const AuthProvider: FC = ({ children }) => {
