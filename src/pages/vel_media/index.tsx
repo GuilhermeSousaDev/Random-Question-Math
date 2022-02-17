@@ -124,7 +124,6 @@ const VelMedia: FC = () => {
             <Button ref={buttonRef} onClick={submitResponse}>Enviar Resposta</Button>
             <br />
             <Button onClick={loadQuestion}>Outra Questão</Button>
-            {res}
             {
                 msg? msg === 'Você Acertou!'? 
                     <Response color={'#28a745'}>{ msg }</Response> : 
