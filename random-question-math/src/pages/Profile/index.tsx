@@ -78,7 +78,7 @@ const Profile: FC = () => {
                         <LiImage onClick={showModal}>
                             {userData.avatar? 
                                 <img 
-                                    src={`https://api-random-math.herokuapp.com/files/${userData.avatar}`} 
+                                    src={userData.avatar} 
                                     alt={userData.avatar} /> : 
                                 <img src={DefaultImg} alt="default_image" />
                             }
