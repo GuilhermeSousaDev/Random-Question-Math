@@ -36,7 +36,6 @@ const Profile: FC = () => {
         hitsPitagoras: 0,
         hitsVelmedia: 0,
     });
-    const [modal, setModal] = useState<boolean>(false);
     const [msg, setMsg] = useState<string>('');
 
     useEffect(() => {
@@ -58,12 +57,6 @@ const Profile: FC = () => {
         })();
     }, [user, navigate, isAuth]);
 
-    const showModal = () => {
-        modal === true?
-            setModal(false) :
-            setModal(true)
-    }
-
     return(
         <Container>
             <Title> Perfil <hr /> <p>{userData?.name}</p> </Title>
@@ -75,15 +68,7 @@ const Profile: FC = () => {
                 {userData?  
                     <>
                         <li>Name: {userData.name}</li>
-                        <LiImage onClick={showModal}>
-                            {userData.avatar? 
-                                <img 
-                                    src={userData.avatar} 
-                                    alt={userData.avatar} /> : 
-                                <img src={DefaultImg} alt="default_image" />
-                            }
-                        </LiImage>
-                        { modal? <Modal /> : ''}
+                        <img src={DefaultImg} alt="default_image" />
                         <br />
                         <h3>Acertos</h3>
                         <li>Bhaskara: {profile.hitsBhaskara}</li>

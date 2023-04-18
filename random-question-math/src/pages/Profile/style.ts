@@ -13,15 +13,10 @@ export const List = styled.ul`
     li {
         padding: 10px;
     }
-
     img {
         width: 30px;
         height: 30px;
     }
-`;
-
-export const LiImage = styled.li`
-    cursor: pointer;
 `;
 
 export const Button = styled.button`
